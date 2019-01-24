@@ -1,0 +1,941 @@
+From 16f2b57812cd82ba1ad3fc3fd42afe070c9bd733 Mon Sep 17 00:00:00 2001
+From: apollosoftware <contact@apollosoftware.io>
+Date: Thu, 24 Jan 2019 00:39:58 -0500
+Subject: [PATCH] Pixelverse Patch
+
+
+diff --git a/src/main/java/net/minecraft/server/AxisAlignedBB.java b/src/main/java/net/minecraft/server/AxisAlignedBB.java
+index c88b76a7..1946171d 100644
+--- a/src/main/java/net/minecraft/server/AxisAlignedBB.java
++++ b/src/main/java/net/minecraft/server/AxisAlignedBB.java
+@@ -5,12 +5,15 @@ import javax.annotation.Nullable;
+ 
+ public class AxisAlignedBB {
+ 
+-    public final double a;
+-    public final double b;
+-    public final double c;
+-    public final double d;
+-    public final double e;
+-    public final double f;
++    public double a;
++    public double b;
++    public double c;
++    public double d;
++    public double e;
++    public double f;
++
++    public AxisAlignedBB() {
++    }
+ 
+     public AxisAlignedBB(double d0, double d1, double d2, double d3, double d4, double d5) {
+         this.a = Math.min(d0, d3);
+@@ -33,6 +36,16 @@ public class AxisAlignedBB {
+         return new AxisAlignedBB(this.a, this.b, this.c, this.d, d0, this.f);
+     }
+ 
++    public AxisAlignedBB mutateSet(AxisAlignedBB other) {
++        this.a = other.a;
++        this.b = other.b;
++        this.c = other.c;
++        this.d = other.d;
++        this.e = other.e;
++        this.f = other.f;
++        return this;
++    }
++
+     public boolean equals(Object object) {
+         if (this == object) {
+             return true;
+diff --git a/src/main/java/net/minecraft/server/ChunkSection.java b/src/main/java/net/minecraft/server/ChunkSection.java
+index aae227fd..e3df29db 100644
+--- a/src/main/java/net/minecraft/server/ChunkSection.java
++++ b/src/main/java/net/minecraft/server/ChunkSection.java
+@@ -5,7 +5,7 @@ public class ChunkSection {
+     private final int yPos;
+     private int nonEmptyBlockCount;
+     private int tickingBlockCount;
+-    final DataPaletteBlock blockIds; // Paper - package
++    public final DataPaletteBlock blockIds; // Paper - package
+     private NibbleArray emittedLight;
+     private NibbleArray skyLight;
+ 
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index 6a8292ce..736456cc 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -143,12 +143,12 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+         this.r = new EULA(new File("eula.txt"));
+         // Spigot Start
+         boolean eulaAgreed = Boolean.getBoolean( "com.mojang.eula.agree" );
+-        if ( eulaAgreed )
+-        {
+-            System.err.println( "You have used the Spigot command line EULA agreement flag." );
+-            System.err.println( "By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula)." );
+-            System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
+-        }
++//        if ( eulaAgreed )
++//        {
++//            System.err.println( "You have used the Spigot command line EULA agreement flag." );
++//            System.err.println( "By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula)." );
++//            System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
++//    }
+         // Spigot End
+         if (!this.r.a() && !eulaAgreed) { // Spigot
+             DedicatedServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index 74bbba01..44d990b1 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -86,7 +86,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     public boolean i; public boolean blocksEntitySpawning() { return i; } // Paper - OBFHELPER
+     public final List<Entity> passengers;
+     protected int j;
+-    private Entity au;public void setVehicle(Entity entity) { this.au = entity; } // Paper // OBFHELPER
++    public Entity au;public void setVehicle(Entity entity) { this.au = entity; } // Paper // OBFHELPER
+     public boolean attachedToPlayer;
+     public World world;
+     public double lastX;
+@@ -115,7 +115,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     public float pitch;
+     public float lastYaw;
+     public float lastPitch;
+-    private AxisAlignedBB boundingBox;
++    public AxisAlignedBB boundingBox;
+     public boolean onGround;
+     public boolean positionChanged;
+     public boolean B;
+@@ -147,12 +147,12 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     protected boolean justCreated;
+     protected boolean fireProof;
+     protected DataWatcher datawatcher;
+-    protected static final DataWatcherObject<Byte> Z = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
+-    private static final DataWatcherObject<Integer> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<String> aB = DataWatcher.a(Entity.class, DataWatcherRegistry.d);
+-    private static final DataWatcherObject<Boolean> aC = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
+-    private static final DataWatcherObject<Boolean> aD = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
+-    private static final DataWatcherObject<Boolean> aE = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Byte> Z = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Integer> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<String> aB = DataWatcher.a(Entity.class, DataWatcherRegistry.d);
++    public static final DataWatcherObject<Boolean> aC = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Boolean> aD = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Boolean> aE = DataWatcher.a(Entity.class, DataWatcherRegistry.h);
+     public boolean aa; public boolean isAddedToChunk() { return aa; } // Paper - OBFHELPER
+     public int ab; public int getChunkX() { return ab; } // Paper - OBFHELPER
+     public int ac; public int getChunkY() { return ac; } // Paper - OBFHELPER
+@@ -182,7 +182,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     public Timing tickTimer = MinecraftTimings.getEntityTimings(this); // Paper
+     public Location origin; // Paper
+     // Spigot start
+-    public final byte activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
++    public byte activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
+     public final boolean defaultActivationState;
+     public long activatedTick = Integer.MIN_VALUE;
+     public boolean fromMobSpawner;
+@@ -1377,7 +1377,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+ 
+     public void collide(Entity entity) {
+         if (!this.x(entity)) {
+-            if (!entity.noclip && !this.noclip) {
++            if (!entity.noclip && !this.noclip  && entity.canBeCollidedWith() && this.canBeCollidedWith()) {
+                 double d0 = entity.locX - this.locX;
+                 double d1 = entity.locZ - this.locZ;
+                 double d2 = MathHelper.a(d0, d1);
+@@ -2223,7 +2223,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     public void setAirTicks(int i) {
+         // CraftBukkit start
+         EntityAirChangeEvent event = new EntityAirChangeEvent(this.getBukkitEntity(), i);
+-        event.getEntity().getServer().getPluginManager().callEvent(event);
++        //event.getEntity().getServer().getPluginManager().callEvent(event);
+         if (event.isCancelled()) {
+             return;
+         }
+@@ -2976,4 +2976,64 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
+     public int getMaxFireTicks() {
+         return 1;
+     }
++
++    public boolean isBasicEntity() {
++        return false;
++    }
++
++    public boolean canBeCollidedWith() {
++        return true;
++    }
++
++    public final boolean isCollidedHorizontally() {
++        return this.positionChanged;
++    }
++
++    public final void setCollidedHorizontally(boolean collidedHorizontally) {
++        this.positionChanged = collidedHorizontally;
++    }
++
++    public final boolean isCollidedVertically() {
++        return this.B;
++    }
++
++    public final void setCollidedVertically(boolean collidedVertically) {
++        this.B = collidedVertically;
++    }
++
++    public final float getStepHeight() {
++        return this.P;
++    }
++
++    public final void setStepHeight(float stepHeight) {
++        this.P = stepHeight;
++    }
++
++    public boolean hasAlternateTrackerUpdateFrequency() {
++        return false;
++    }
++
++    public int getAlternateTrackerUpdateFrequency() {
++        return 3;
++    }
++
++    public void onEnterTracking(EntityPlayer entityplayer) {
++
++    }
++
++    public void onLeaveTracking(EntityPlayer player) {
++    }
++
++    public void onUpdateTracking(EntityPlayer player) {
++    }
++
++    public Packet getSpawnPacket() {
++        return null;
++    }
++
++    public boolean canObserve(EntityPlayer player) {
++        return true;
++    }
++
++
+ }
+diff --git a/src/main/java/net/minecraft/server/EntityAgeable.java b/src/main/java/net/minecraft/server/EntityAgeable.java
+index db23aedc..843787b0 100644
+--- a/src/main/java/net/minecraft/server/EntityAgeable.java
++++ b/src/main/java/net/minecraft/server/EntityAgeable.java
+@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
+ 
+ public abstract class EntityAgeable extends EntityCreature {
+ 
+-    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
+     protected int a;
+     protected int b;
+     protected int c;
+diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
+index 8a9e16ad..1cb131d7 100644
+--- a/src/main/java/net/minecraft/server/EntityArrow.java
++++ b/src/main/java/net/minecraft/server/EntityArrow.java
+@@ -23,7 +23,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
+             return this.a((Entity) object);
+         }
+     }});
+-    private static final DataWatcherObject<Byte> g = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> g = DataWatcher.a(EntityArrow.class, DataWatcherRegistry.a);
+     public int h; // PAIL: private->public
+     public int at; // PAIL: private->public
+     public int au; // PAIL: private->public
+diff --git a/src/main/java/net/minecraft/server/EntityBoat.java b/src/main/java/net/minecraft/server/EntityBoat.java
+index 164e21fe..a14a4368 100644
+--- a/src/main/java/net/minecraft/server/EntityBoat.java
++++ b/src/main/java/net/minecraft/server/EntityBoat.java
+@@ -16,11 +16,11 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
+ 
+ public class EntityBoat extends Entity {
+ 
+-    private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Float> c = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> d = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean>[] e = new DataWatcherObject[] { DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h), DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h)};
++    public static final DataWatcherObject<Integer> a = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> b = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Float> c = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.c);
++    public static final DataWatcherObject<Integer> d = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean>[] e = new DataWatcherObject[] { DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h), DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h)};
+     private final float[] f;
+     private float g;
+     private float h;
+diff --git a/src/main/java/net/minecraft/server/EntityCreeper.java b/src/main/java/net/minecraft/server/EntityCreeper.java
+index 67ba72fc..90cf46dc 100644
+--- a/src/main/java/net/minecraft/server/EntityCreeper.java
++++ b/src/main/java/net/minecraft/server/EntityCreeper.java
+@@ -10,9 +10,9 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
+ 
+ public class EntityCreeper extends EntityMonster {
+ 
+-    private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.h);
+-    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.h); private static final DataWatcherObject<Boolean> isIgnitedDW = c; // Paper OBFHELPER
++    public static final DataWatcherObject<Integer> a = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.h); private static final DataWatcherObject<Boolean> isIgnitedDW = c; // Paper OBFHELPER
+     private int bx;
+     private int fuseTicks;
+     public int maxFuseTicks = 30; // PAIL private -> public
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index aa0b27f0..e291ec22 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -24,12 +24,12 @@ import org.bukkit.util.Vector;
+ 
+ public abstract class EntityHuman extends EntityLiving {
+ 
+-    private static final DataWatcherObject<Float> a = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.b);
+-    protected static final DataWatcherObject<Byte> br = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
+-    protected static final DataWatcherObject<Byte> bs = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
+-    protected static final DataWatcherObject<NBTTagCompound> bt = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.n);
+-    protected static final DataWatcherObject<NBTTagCompound> bu = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.n);
++    public static final DataWatcherObject<Float> a = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.c);
++    public static final DataWatcherObject<Integer> b = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Byte> br = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> bs = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<NBTTagCompound> bt = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.n);
++    public static final DataWatcherObject<NBTTagCompound> bu = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.n);
+     public PlayerInventory inventory = new PlayerInventory(this);
+     protected InventoryEnderChest enderChest = new InventoryEnderChest(this); // CraftBukkit - add "this" to constructor
+     public Container defaultContainer;
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index d6a1933a..b7d209e5 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -22,7 +22,7 @@ import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
+ 
+ public abstract class EntityInsentient extends EntityLiving {
+ 
+-    private static final DataWatcherObject<Byte> a = DataWatcher.a(EntityInsentient.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> a = DataWatcher.a(EntityInsentient.class, DataWatcherRegistry.a);
+     public int a_;
+     protected int b_;
+     private final ControllerLook lookController;
+diff --git a/src/main/java/net/minecraft/server/EntityIronGolem.java b/src/main/java/net/minecraft/server/EntityIronGolem.java
+index 072d20bf..76ed5d57 100644
+--- a/src/main/java/net/minecraft/server/EntityIronGolem.java
++++ b/src/main/java/net/minecraft/server/EntityIronGolem.java
+@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
+ 
+ public class EntityIronGolem extends EntityGolem {
+ 
+-    protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
+     private int c;
+     @Nullable
+     Village b;
+diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
+index 099bc755..1fd363b1 100644
+--- a/src/main/java/net/minecraft/server/EntityItem.java
++++ b/src/main/java/net/minecraft/server/EntityItem.java
+@@ -20,7 +20,7 @@ public class EntityItem extends Entity implements HopperPusher {
+ // Paper end
+ 
+     private static final Logger b = LogManager.getLogger();
+-    private static final DataWatcherObject<ItemStack> c = DataWatcher.a(EntityItem.class, DataWatcherRegistry.f);
++    public static final DataWatcherObject<ItemStack> c = DataWatcher.a(EntityItem.class, DataWatcherRegistry.f);
+     private int age;
+     public int pickupDelay;
+     public boolean canMobPickup = true; // Paper
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index ed5bb2d3..baa84778 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -39,11 +39,11 @@ public abstract class EntityLiving extends Entity {
+     private static final Logger a = LogManager.getLogger();
+     private static final UUID b = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
+     private static final AttributeModifier c = (new AttributeModifier(EntityLiving.b, "Sprinting speed boost", 0.30000001192092896D, 2)).a(false);
+-    protected static final DataWatcherObject<Byte> at = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> at = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.a);
+     public static final DataWatcherObject<Float> HEALTH = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> h = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.h);
+-    private static final DataWatcherObject<Integer> br = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> g = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> h = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Integer> br = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
+     private AttributeMapBase attributeMap;
+     public CombatTracker combatTracker = new CombatTracker(this);
+     public final Map<MobEffectList, MobEffect> effects = Maps.newHashMap();
+diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+index 1f402548..11a4f612 100644
+--- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
++++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+@@ -17,12 +17,12 @@ import org.bukkit.util.Vector;
+ 
+ public abstract class EntityMinecartAbstract extends Entity implements INamableTileEntity {
+ 
+-    private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Float> c = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> d = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Integer> a = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> b = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Float> c = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.c);
++    public static final DataWatcherObject<Integer> d = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.h);
+     private boolean g;
+     private static final int[][][] h = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
+     private int at;
+diff --git a/src/main/java/net/minecraft/server/EntityOcelot.java b/src/main/java/net/minecraft/server/EntityOcelot.java
+index 858bbef5..50648633 100644
+--- a/src/main/java/net/minecraft/server/EntityOcelot.java
++++ b/src/main/java/net/minecraft/server/EntityOcelot.java
+@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
+ 
+ public class EntityOcelot extends EntityTameableAnimal {
+ 
+-    private static final DataWatcherObject<Integer> bB = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> bB = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.b);
+     private PathfinderGoalAvoidTarget<EntityHuman> bC;
+     private PathfinderGoalTempt bD;
+     public boolean spawnBonus = true; // Spigot
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index c1a2ddcf..094e9cda 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -97,6 +97,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     public boolean sentListPacket = false;
+     // CraftBukkit end
+ 
++    private Runnable tickAdapter;
++
+     public EntityPlayer(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
+         super(worldserver, gameprofile);
+         playerinteractmanager.player = this;
+@@ -122,6 +124,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+         // CraftBukkit end
+     }
+ 
++    public Runnable getTickAdapter() {
++        return tickAdapter;
++    }
++
++    public void setTickAdapter(Runnable tickAdapter) {
++        this.tickAdapter = tickAdapter;
++    }
++
+     public final BlockPosition getSpawnPoint(MinecraftServer minecraftserver, WorldServer worldserver) {
+         BlockPosition blockposition = worldserver.getSpawn();
+ 
+@@ -295,6 +305,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+             this.activeContainer = this.defaultContainer;
+         }
+ 
++        if(this.tickAdapter != null) {
++            tickAdapter.run();
++        }
++
+         while (!this.removeQueue.isEmpty()) {
+             int i = Math.min(this.removeQueue.size(), Integer.MAX_VALUE);
+             int[] aint = new int[i];
+diff --git a/src/main/java/net/minecraft/server/EntitySlime.java b/src/main/java/net/minecraft/server/EntitySlime.java
+index 3d3a9ca0..0dc3e492 100644
+--- a/src/main/java/net/minecraft/server/EntitySlime.java
++++ b/src/main/java/net/minecraft/server/EntitySlime.java
+@@ -7,7 +7,7 @@ import org.bukkit.event.entity.SlimeSplitEvent;
+ 
+ public class EntitySlime extends EntityInsentient implements IMonster {
+ 
+-    private static final DataWatcherObject<Integer> bv = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> bv = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
+     public float a;
+     public float b;
+     public float c;
+diff --git a/src/main/java/net/minecraft/server/EntitySpider.java b/src/main/java/net/minecraft/server/EntitySpider.java
+index 957fa577..c809ddb0 100644
+--- a/src/main/java/net/minecraft/server/EntitySpider.java
++++ b/src/main/java/net/minecraft/server/EntitySpider.java
+@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
+ 
+ public class EntitySpider extends EntityMonster {
+ 
+-    private static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.a);
+ 
+     public EntitySpider(World world) {
+         super(world);
+diff --git a/src/main/java/net/minecraft/server/EntityTracker.java b/src/main/java/net/minecraft/server/EntityTracker.java
+index a60f9460..a6de45f5 100644
+--- a/src/main/java/net/minecraft/server/EntityTracker.java
++++ b/src/main/java/net/minecraft/server/EntityTracker.java
+@@ -5,6 +5,8 @@ import com.google.common.collect.Sets;
+ import java.util.ArrayList;
+ import java.util.Iterator;
+ import java.util.Set;
++
++import net.pixelverse.TrackerData;
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
+@@ -12,7 +14,7 @@ public class EntityTracker {
+ 
+     private static final Logger a = LogManager.getLogger();
+     private final WorldServer world;
+-    private final Set<EntityTrackerEntry> c = Sets.newHashSet();
++    private final TrackerData entries = new TrackerData(4096);
+     public final IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
+     private int e;
+ 
+@@ -26,17 +28,18 @@ public class EntityTracker {
+     }
+ 
+     public void track(Entity entity) {
+-        if (entity instanceof EntityPlayer) {
++        if (entity.isBasicEntity()) {
++            this.addEntity(entity, 160, 3, true);
++        } else if (entity instanceof EntityPlayer) {
+             this.addEntity(entity, 512, 2);
+-            EntityPlayer entityplayer = (EntityPlayer) entity;
+-            Iterator iterator = this.c.iterator();
+-
+-            while (iterator.hasNext()) {
+-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
+-                if (entitytrackerentry.b() != entityplayer) {
++            EntityPlayer entityplayer = (EntityPlayer)entity;
++            int i = 0;
++            while (i < this.entries.size) {
++                EntityTrackerEntry entitytrackerentry = this.entries.data[i];
++                if (entitytrackerentry.tracker != entityplayer) {
+                     entitytrackerentry.updatePlayer(entityplayer);
+                 }
++                ++i;
+             }
+         } else if (entity instanceof EntityFishingHook) {
+             this.addEntity(entity, 64, 5, true);
+@@ -114,7 +117,7 @@ public class EntityTracker {
+ 
+             EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i, this.e, j, flag);
+ 
+-            this.c.add(entitytrackerentry);
++            this.entries.add(entitytrackerentry);
+             this.trackedEntities.a(entity.getId(), entitytrackerentry);
+             entitytrackerentry.scanPlayers(this.world.players);
+         } catch (Throwable throwable) {
+@@ -153,71 +156,65 @@ public class EntityTracker {
+     public void untrackEntity(Entity entity) {
+         org.spigotmc.AsyncCatcher.catchOp( "entity untrack"); // Spigot
+         if (entity instanceof EntityPlayer) {
+-            EntityPlayer entityplayer = (EntityPlayer) entity;
+-            Iterator iterator = this.c.iterator();
+-
+-            while (iterator.hasNext()) {
+-                EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
++            EntityPlayer entityplayer = (EntityPlayer)entity;
++            int i = 0;
++            while (i < this.entries.size) {
++                EntityTrackerEntry entitytrackerentry = this.entries.data[i];
+                 entitytrackerentry.a(entityplayer);
++                ++i;
+             }
+         }
+ 
+         EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) this.trackedEntities.d(entity.getId());
+ 
+         if (entitytrackerentry1 != null) {
+-            this.c.remove(entitytrackerentry1);
++            this.entries.remove(entitytrackerentry1);
+             entitytrackerentry1.a();
+         }
+ 
+     }
+ 
+     public void updatePlayers() {
+-        ArrayList arraylist = Lists.newArrayList();
+-        Iterator iterator = this.c.iterator();
+-        world.timings.tracker1.startTiming(); // Spigot
+-        while (iterator.hasNext()) {
+-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
++        ArrayList<EntityPlayer> arraylist = Lists.newArrayList();
++        int i = 0;
++        while (i < this.entries.size) {
++            EntityTrackerEntry entitytrackerentry = this.entries.data[i];
+             entitytrackerentry.track(this.world.players);
+-            if (entitytrackerentry.b) {
+-                Entity entity = entitytrackerentry.b();
+-
+-                if (entity instanceof EntityPlayer) {
+-                    arraylist.add((EntityPlayer) entity);
+-                }
++            if (entitytrackerentry.b && entitytrackerentry.tracker instanceof EntityPlayer) {
++                arraylist.add((EntityPlayer)entitytrackerentry.tracker);
+             }
++            ++i;
+         }
+         world.timings.tracker1.stopTiming(); // Spigot
+ 
+         world.timings.tracker2.startTiming(); // Spigot
+-        for (int i = 0; i < arraylist.size(); ++i) {
++        i = 0;
++        while (i < arraylist.size()) {
+             EntityPlayer entityplayer = (EntityPlayer) arraylist.get(i);
+-            Iterator iterator1 = this.c.iterator();
+-
+-            while (iterator1.hasNext()) {
+-                EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
+-
+-                if (entitytrackerentry1.b() != entityplayer) {
++            int j = 0;
++            while (j < this.entries.size) {
++                EntityTrackerEntry entitytrackerentry1 = this.entries.data[j];
++                if (entitytrackerentry1.tracker != entityplayer) {
+                     entitytrackerentry1.updatePlayer(entityplayer);
+                 }
++                ++j;
+             }
++            ++i;
+         }
+         world.timings.tracker2.stopTiming(); // Spigot
+ 
+     }
+ 
+     public void a(EntityPlayer entityplayer) {
+-        Iterator iterator = this.c.iterator();
+-
+-        while (iterator.hasNext()) {
+-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
+-            if (entitytrackerentry.b() == entityplayer) {
++        int i = 0;
++        while (i < this.entries.size) {
++            EntityTrackerEntry entitytrackerentry = this.entries.data[i];
++            if (entitytrackerentry.tracker == entityplayer) {
+                 entitytrackerentry.scanPlayers(this.world.players);
+             } else {
+                 entitytrackerentry.updatePlayer(entityplayer);
+             }
++            ++i;
+         }
+ 
+     }
+@@ -241,23 +238,22 @@ public class EntityTracker {
+     }
+ 
+     public void untrackPlayer(EntityPlayer entityplayer) {
+-        Iterator iterator = this.c.iterator();
+-
+-        while (iterator.hasNext()) {
+-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
++        int i = 0;
++        while (i < this.entries.size) {
++            EntityTrackerEntry entitytrackerentry = this.entries.data[i];
+             entitytrackerentry.clear(entityplayer);
++            ++i;
+         }
+-
+     }
+ 
+     public void a(EntityPlayer entityplayer, Chunk chunk) {
+         ArrayList arraylist = Lists.newArrayList();
+         ArrayList arraylist1 = Lists.newArrayList();
+-        Iterator iterator = this.c.iterator();
++        Iterator iterator;
+ 
+-        while (iterator.hasNext()) {
+-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
++        int i = 0;
++        while (i < this.entries.size) {
++            EntityTrackerEntry entitytrackerentry = this.entries.data[i];
+             Entity entity = entitytrackerentry.b();
+ 
+             if (entity != entityplayer && entity.ab == chunk.locX && entity.ad == chunk.locZ) {
+@@ -270,6 +266,7 @@ public class EntityTracker {
+                     arraylist1.add(entity);
+                 }
+             }
++            ++i;
+         }
+ 
+         Entity entity1;
+@@ -296,12 +293,11 @@ public class EntityTracker {
+ 
+     public void a(int i) {
+         this.e = (i - 1) * 16;
+-        Iterator iterator = this.c.iterator();
+-
+-        while (iterator.hasNext()) {
+-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
+-
++        int k = 0;
++        while (k < this.entries.size) {
++            EntityTrackerEntry entitytrackerentry = this.entries.data[i];
+             entitytrackerentry.a(this.e);
++            ++k;
+         }
+ 
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index efc4c79a..7378c58f 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -17,7 +17,8 @@ import org.bukkit.event.player.PlayerVelocityEvent;
+ public class EntityTrackerEntry {
+ 
+     private static final Logger c = LogManager.getLogger();
+-    private final Entity tracker;
++    public final Entity tracker;
++    public int trackerLocation = -1;
+     private final int e;
+     private int f;
+     private final int g;
+@@ -361,6 +362,10 @@ public class EntityTrackerEntry {
+                         }
+                     }
+ 
++                    if(!this.tracker.canObserve(entityplayer)) {
++                        return;
++                    }
++
+                     entityplayer.removeQueue.remove(Integer.valueOf(this.tracker.getId()));
+                     // CraftBukkit end
+                     this.trackedPlayerMap.put(entityplayer, true); // Paper
+@@ -525,8 +530,9 @@ public class EntityTrackerEntry {
+             return null;
+             // CraftBukkit end
+         }
+-
+-        if (this.tracker instanceof EntityPlayer) {
++        if (this.tracker.isBasicEntity()) {
++            return this.tracker.getSpawnPacket();
++        } else if (this.tracker instanceof EntityPlayer) {
+             return new PacketPlayOutNamedEntitySpawn((EntityHuman) this.tracker);
+         } else if (this.tracker instanceof IAnimal) {
+             this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
+diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
+index a9c4ab10..f71767dc 100644
+--- a/src/main/java/net/minecraft/server/EntityVillager.java
++++ b/src/main/java/net/minecraft/server/EntityVillager.java
+@@ -18,7 +18,7 @@ import org.bukkit.event.entity.VillagerReplenishTradeEvent;
+ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
+ 
+     private static final Logger by = LogManager.getLogger();
+-    private static final DataWatcherObject<Integer> bz = DataWatcher.a(EntityVillager.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> bz = DataWatcher.a(EntityVillager.class, DataWatcherRegistry.b);
+     private int profession;
+     private boolean bB;
+     private boolean bC;
+diff --git a/src/main/java/net/minecraft/server/ItemWorldMap.java b/src/main/java/net/minecraft/server/ItemWorldMap.java
+index e0799ff0..198e5c20 100644
+--- a/src/main/java/net/minecraft/server/ItemWorldMap.java
++++ b/src/main/java/net/minecraft/server/ItemWorldMap.java
+@@ -294,7 +294,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
+             }
+ 
+             if (flag || entity instanceof EntityHuman && ((EntityHuman) entity).getItemInOffHand() == itemstack) {
+-                this.a(world, entity, worldmap);
++                //this.a(world, entity, worldmap);
+             }
+ 
+         }
+diff --git a/src/main/java/net/pixelverse/PacketMasker.java b/src/main/java/net/pixelverse/PacketMasker.java
+new file mode 100644
+index 00000000..07cbe85b
+--- /dev/null
++++ b/src/main/java/net/pixelverse/PacketMasker.java
+@@ -0,0 +1,45 @@
++package net.pixelverse;
++
++import net.minecraft.server.*;
++
++/**
++ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * All rights reserved. No part of this publication may be reproduced, distributed, or
++ * transmitted in any form or by any means, including photocopying, recording, or other
++ * electronic or mechanical methods, without the prior written permission of the publisher,
++ * except in the case of brief quotations embodied in critical reviews and certain other
++ * noncommercial uses permitted by copyright law.
++ */
++
++
++public interface PacketMasker {
++    public static final PacketMasker arrowPacketMasker = new PacketMasker() {
++
++        @Override
++        public Packet getSpawnPacket(Entity tracker) {
++            Entity entity = ((EntityArrow) tracker).shooter;
++            return new PacketPlayOutSpawnEntity(tracker, 60, entity != null ? entity.getId() : tracker.getId());
++        }
++
++        @Override
++        public void onEnterTracking(Entity tracker, EntityPlayer player) {
++        }
++
++        @Override
++        public void onLeaveTracking(Entity tracker, EntityPlayer player) {
++        }
++
++        @Override
++        public void onUpdateTracking(Entity tracker, EntityPlayer player) {
++        }
++    };
++
++    public Packet getSpawnPacket(Entity var1);
++
++    public void onEnterTracking(Entity var1, EntityPlayer var2);
++
++    public void onLeaveTracking(Entity var1, EntityPlayer var2);
++
++    public void onUpdateTracking(Entity var1, EntityPlayer var2);
++
++}
+diff --git a/src/main/java/net/pixelverse/TrackerData.java b/src/main/java/net/pixelverse/TrackerData.java
+new file mode 100644
+index 00000000..e9cf5759
+--- /dev/null
++++ b/src/main/java/net/pixelverse/TrackerData.java
+@@ -0,0 +1,59 @@
++package net.pixelverse;
++
++import net.minecraft.server.EntityTrackerEntry;
++
++import java.util.Arrays;
++
++/**
++ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * All rights reserved. No part of this publication may be reproduced, distributed, or
++ * transmitted in any form or by any means, including photocopying, recording, or other
++ * electronic or mechanical methods, without the prior written permission of the publisher,
++ * except in the case of brief quotations embodied in critical reviews and certain other
++ * noncommercial uses permitted by copyright law.
++ */
++
++public final class TrackerData {
++    public EntityTrackerEntry[] data;
++    public int size;
++
++    public TrackerData(int capacity) {
++        this.data = new EntityTrackerEntry[capacity];
++    }
++
++    public final void add(EntityTrackerEntry entity) {
++        if (this.size == this.data.length) {
++            this.data = Arrays.copyOf(this.data, this.data.length * 3 / 2 + 1);
++        }
++        entity.trackerLocation = this.size;
++        this.data[this.size++] = entity;
++    }
++
++    public final void remove(int index) {
++        if (index >= 0 && index < this.size) {
++            --this.size;
++            EntityTrackerEntry mov = this.data[this.size];
++            EntityTrackerEntry rem = this.data[index];
++            mov.trackerLocation = index;
++            rem.trackerLocation = -1;
++            this.data[index] = mov;
++            this.data[this.size] = null;
++        }
++    }
++
++    public final void remove(EntityTrackerEntry entity) {
++        int index = entity.trackerLocation;
++        if (index != -1) {
++            --this.size;
++            EntityTrackerEntry mov = this.data[this.size];
++            mov.trackerLocation = index;
++            entity.trackerLocation = -1;
++            this.data[index] = mov;
++            this.data[this.size] = null;
++        }
++    }
++
++    public final boolean contains(EntityTrackerEntry entity) {
++        return entity.trackerLocation != -1;
++    }
++}
+diff --git a/src/main/java/net/pixelverse/UnsafeHelper.java b/src/main/java/net/pixelverse/UnsafeHelper.java
+new file mode 100644
+index 00000000..64ee963c
+--- /dev/null
++++ b/src/main/java/net/pixelverse/UnsafeHelper.java
+@@ -0,0 +1,74 @@
++package net.pixelverse;
++
++
++import sun.misc.Unsafe;
++
++import java.lang.reflect.Field;
++
++/**
++ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * All rights reserved. No part of this publication may be reproduced, distributed, or
++ * transmitted in any form or by any means, including photocopying, recording, or other
++ * electronic or mechanical methods, without the prior written permission of the publisher,
++ * except in the case of brief quotations embodied in critical reviews and certain other
++ * noncommercial uses permitted by copyright law.
++ */
++
++public class UnsafeHelper {
++    public static final Unsafe UNSAFE;
++
++    static {
++        try {
++            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
++            theUnsafe.setAccessible(true);
++            UNSAFE = (Unsafe) theUnsafe.get(null);
++        } catch (Exception e) {
++            throw new IllegalStateException("Error while getting Unsafe", e);
++        }
++    }
++
++    public static long getOffset(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.objectFieldOffset(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find offset", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++
++    public static long getStaticOffset(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.staticFieldOffset(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find offset", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++
++    public static Object getStaticBase(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.staticFieldBase(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find base", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++}
+\ No newline at end of file
+-- 
+2.13.3.windows.1
+
