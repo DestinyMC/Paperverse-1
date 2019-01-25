@@ -1,4 +1,4 @@
-From 16f2b57812cd82ba1ad3fc3fd42afe070c9bd733 Mon Sep 17 00:00:00 2001
+From 19256d753a4a3886f3649146b70ee8f807aef7d3 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Thu, 24 Jan 2019 00:39:58 -0500
 Subject: [PATCH] Pixelverse Patch
@@ -343,7 +343,7 @@ index 099bc755..1fd363b1 100644
      public int pickupDelay;
      public boolean canMobPickup = true; // Paper
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index ed5bb2d3..baa84778 100644
+index ed5bb2d3..ef875586 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -39,11 +39,11 @@ public abstract class EntityLiving extends Entity {
@@ -362,6 +362,15 @@ index ed5bb2d3..baa84778 100644
      private AttributeMapBase attributeMap;
      public CombatTracker combatTracker = new CombatTracker(this);
      public final Map<MobEffectList, MobEffect> effects = Maps.newHashMap();
+@@ -84,7 +84,7 @@ public abstract class EntityLiving extends Entity {
+     protected float ba;
+     protected int bb; protected int getKillCount() { return this.bb; } // Paper - OBFHELPER
+     public float lastDamage;
+-    protected boolean bd;
++    public boolean bd;
+     public float be;
+     public float bf;
+     public float bg;
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 index 1f402548..11a4f612 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
