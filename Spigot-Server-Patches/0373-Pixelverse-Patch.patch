@@ -1,4 +1,4 @@
-From 19256d753a4a3886f3649146b70ee8f807aef7d3 Mon Sep 17 00:00:00 2001
+From 6b4c938a7287dbb8724fcff36b79b629cb6dffd6 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Thu, 24 Jan 2019 00:39:58 -0500
 Subject: [PATCH] Pixelverse Patch
@@ -446,6 +446,19 @@ index c1a2ddcf..094e9cda 100644
          while (!this.removeQueue.isEmpty()) {
              int i = Math.min(this.removeQueue.size(), Integer.MAX_VALUE);
              int[] aint = new int[i];
+diff --git a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+index 8f4b63c8..73b21f48 100644
+--- a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
++++ b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
+@@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityCombustEvent; // CraftBukkit
+ 
+ public abstract class EntitySkeletonAbstract extends EntityMonster implements IRangedEntity {
+ 
+-    private static final DataWatcherObject<Boolean> a = DataWatcher.a(EntitySkeletonAbstract.class, DataWatcherRegistry.h);
++    public static final DataWatcherObject<Boolean> a = DataWatcher.a(EntitySkeletonAbstract.class, DataWatcherRegistry.h);
+     private final PathfinderGoalBowShoot<EntitySkeletonAbstract> b = new PathfinderGoalBowShoot(this, 1.0D, 20, 15.0F);
+     private final PathfinderGoalMeleeAttack c = new PathfinderGoalMeleeAttack(this, 1.2D, false) { // CraftBukkit - decompile error
+         public void d() {
 diff --git a/src/main/java/net/minecraft/server/EntitySlime.java b/src/main/java/net/minecraft/server/EntitySlime.java
 index 3d3a9ca0..0dc3e492 100644
 --- a/src/main/java/net/minecraft/server/EntitySlime.java
