@@ -1,4 +1,4 @@
-From 6b4c938a7287dbb8724fcff36b79b629cb6dffd6 Mon Sep 17 00:00:00 2001
+From e63f6d25e0ae533be3dfca61f692ad0f9034f234 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Thu, 24 Jan 2019 00:39:58 -0500
 Subject: [PATCH] Pixelverse Patch
@@ -958,6 +958,19 @@ index 00000000..64ee963c
 +    }
 +}
 \ No newline at end of file
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
+index 1ac549e5..cbe995d3 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
+@@ -32,7 +32,7 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
+     static final ItemMetaKey SKULL_OWNER = new ItemMetaKey("SkullOwner", "skull-owner");
+     static final int MAX_OWNER_LENGTH = 16;
+ 
+-    private GameProfile profile;
++    public GameProfile profile;
+ 
+     CraftMetaSkull(CraftMetaItem meta) {
+         super(meta);
 -- 
 2.13.3.windows.1
 
