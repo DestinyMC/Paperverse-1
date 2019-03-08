@@ -1,4 +1,4 @@
-From b363c149dc93d79d0a4f1c31b67e1293a49f3fc7 Mon Sep 17 00:00:00 2001
+From 9277043e679dca5dbf7513983030aa7a79bf3afb Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 17 Oct 2018 21:58:27 -0400
 Subject: [PATCH] Backport Timings improvements from 1.13
@@ -358,6 +358,36 @@ index 1474384e..9a4f9dca 100644
      }
  
      private static class AutoInstantiatingLoader<K, V> implements Function<K, V> {
+diff --git a/src/main/java/org/bukkit/inventory/ShapedRecipe.java b/src/main/java/org/bukkit/inventory/ShapedRecipe.java
+index d7fa6d28..dbd187d3 100644
+--- a/src/main/java/org/bukkit/inventory/ShapedRecipe.java
++++ b/src/main/java/org/bukkit/inventory/ShapedRecipe.java
+@@ -147,6 +147,10 @@ public class ShapedRecipe implements Recipe, Keyed {
+         return result;
+     }
+ 
++    public Map<Character, ItemStack> getIngredients() {
++        return ingredients;
++    }
++
+     /**
+      * Get the shape.
+      *
+diff --git a/src/main/java/org/bukkit/inventory/ShapelessRecipe.java b/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
+index f2dd46f2..a0801fd5 100644
+--- a/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
++++ b/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
+@@ -214,6 +214,10 @@ public class ShapelessRecipe implements Recipe, Keyed {
+         return this;
+     }
+ 
++    public List<ItemStack> getIngredients() {
++        return ingredients;
++    }
++
+     /**
+      * Get the result of this recipe.
+      *
 -- 
 2.13.3.windows.1
 
