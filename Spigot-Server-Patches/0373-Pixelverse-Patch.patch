@@ -1,11 +1,11 @@
-From e63f6d25e0ae533be3dfca61f692ad0f9034f234 Mon Sep 17 00:00:00 2001
+From dca4959e14bfdf2313ef07ba212719effa4e9e44 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Thu, 24 Jan 2019 00:39:58 -0500
 Subject: [PATCH] Pixelverse Patch
 
 
 diff --git a/src/main/java/net/minecraft/server/AxisAlignedBB.java b/src/main/java/net/minecraft/server/AxisAlignedBB.java
-index c88b76a7..1946171d 100644
+index c88b76a79..1946171d1 100644
 --- a/src/main/java/net/minecraft/server/AxisAlignedBB.java
 +++ b/src/main/java/net/minecraft/server/AxisAlignedBB.java
 @@ -5,12 +5,15 @@ import javax.annotation.Nullable;
@@ -48,7 +48,7 @@ index c88b76a7..1946171d 100644
          if (this == object) {
              return true;
 diff --git a/src/main/java/net/minecraft/server/ChunkSection.java b/src/main/java/net/minecraft/server/ChunkSection.java
-index aae227fd..e3df29db 100644
+index aae227fdb..e3df29db0 100644
 --- a/src/main/java/net/minecraft/server/ChunkSection.java
 +++ b/src/main/java/net/minecraft/server/ChunkSection.java
 @@ -5,7 +5,7 @@ public class ChunkSection {
@@ -61,7 +61,7 @@ index aae227fd..e3df29db 100644
      private NibbleArray skyLight;
  
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 6a8292ce..736456cc 100644
+index 6a8292ce4..736456ccc 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -143,12 +143,12 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -84,7 +84,7 @@ index 6a8292ce..736456cc 100644
          if (!this.r.a() && !eulaAgreed) { // Spigot
              DedicatedServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index 74bbba01..44d990b1 100644
+index 74bbba011..44d990b17 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -86,7 +86,7 @@ public abstract class Entity implements ICommandListener, KeyedObject { // Paper
@@ -217,7 +217,7 @@ index 74bbba01..44d990b1 100644
 +
  }
 diff --git a/src/main/java/net/minecraft/server/EntityAgeable.java b/src/main/java/net/minecraft/server/EntityAgeable.java
-index db23aedc..843787b0 100644
+index db23aedc4..843787b0d 100644
 --- a/src/main/java/net/minecraft/server/EntityAgeable.java
 +++ b/src/main/java/net/minecraft/server/EntityAgeable.java
 @@ -4,7 +4,7 @@ import javax.annotation.Nullable;
@@ -230,7 +230,7 @@ index db23aedc..843787b0 100644
      protected int b;
      protected int c;
 diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
-index 8a9e16ad..1cb131d7 100644
+index 8a9e16ad6..1cb131d74 100644
 --- a/src/main/java/net/minecraft/server/EntityArrow.java
 +++ b/src/main/java/net/minecraft/server/EntityArrow.java
 @@ -23,7 +23,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
@@ -243,7 +243,7 @@ index 8a9e16ad..1cb131d7 100644
      public int at; // PAIL: private->public
      public int au; // PAIL: private->public
 diff --git a/src/main/java/net/minecraft/server/EntityBoat.java b/src/main/java/net/minecraft/server/EntityBoat.java
-index 164e21fe..a14a4368 100644
+index 164e21fe8..a14a4368c 100644
 --- a/src/main/java/net/minecraft/server/EntityBoat.java
 +++ b/src/main/java/net/minecraft/server/EntityBoat.java
 @@ -16,11 +16,11 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -264,7 +264,7 @@ index 164e21fe..a14a4368 100644
      private float g;
      private float h;
 diff --git a/src/main/java/net/minecraft/server/EntityCreeper.java b/src/main/java/net/minecraft/server/EntityCreeper.java
-index 67ba72fc..90cf46dc 100644
+index 67ba72fc1..90cf46dc6 100644
 --- a/src/main/java/net/minecraft/server/EntityCreeper.java
 +++ b/src/main/java/net/minecraft/server/EntityCreeper.java
 @@ -10,9 +10,9 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -281,7 +281,7 @@ index 67ba72fc..90cf46dc 100644
      private int fuseTicks;
      public int maxFuseTicks = 30; // PAIL private -> public
 diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
-index aa0b27f0..e291ec22 100644
+index aa0b27f0e..e291ec22b 100644
 --- a/src/main/java/net/minecraft/server/EntityHuman.java
 +++ b/src/main/java/net/minecraft/server/EntityHuman.java
 @@ -24,12 +24,12 @@ import org.bukkit.util.Vector;
@@ -304,7 +304,7 @@ index aa0b27f0..e291ec22 100644
      protected InventoryEnderChest enderChest = new InventoryEnderChest(this); // CraftBukkit - add "this" to constructor
      public Container defaultContainer;
 diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
-index d6a1933a..b7d209e5 100644
+index d6a1933ad..b7d209e59 100644
 --- a/src/main/java/net/minecraft/server/EntityInsentient.java
 +++ b/src/main/java/net/minecraft/server/EntityInsentient.java
 @@ -22,7 +22,7 @@ import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
@@ -317,7 +317,7 @@ index d6a1933a..b7d209e5 100644
      protected int b_;
      private final ControllerLook lookController;
 diff --git a/src/main/java/net/minecraft/server/EntityIronGolem.java b/src/main/java/net/minecraft/server/EntityIronGolem.java
-index 072d20bf..76ed5d57 100644
+index 072d20bf4..76ed5d572 100644
 --- a/src/main/java/net/minecraft/server/EntityIronGolem.java
 +++ b/src/main/java/net/minecraft/server/EntityIronGolem.java
 @@ -5,7 +5,7 @@ import javax.annotation.Nullable;
@@ -330,7 +330,7 @@ index 072d20bf..76ed5d57 100644
      @Nullable
      Village b;
 diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
-index 099bc755..1fd363b1 100644
+index 099bc7551..1fd363b19 100644
 --- a/src/main/java/net/minecraft/server/EntityItem.java
 +++ b/src/main/java/net/minecraft/server/EntityItem.java
 @@ -20,7 +20,7 @@ public class EntityItem extends Entity implements HopperPusher {
@@ -343,7 +343,7 @@ index 099bc755..1fd363b1 100644
      public int pickupDelay;
      public boolean canMobPickup = true; // Paper
 diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
-index ed5bb2d3..ef875586 100644
+index ed5bb2d32..ef875586b 100644
 --- a/src/main/java/net/minecraft/server/EntityLiving.java
 +++ b/src/main/java/net/minecraft/server/EntityLiving.java
 @@ -39,11 +39,11 @@ public abstract class EntityLiving extends Entity {
@@ -372,7 +372,7 @@ index ed5bb2d3..ef875586 100644
      public float bf;
      public float bg;
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
-index 1f402548..11a4f612 100644
+index 1f4025486..11a4f612f 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
 @@ -17,12 +17,12 @@ import org.bukkit.util.Vector;
@@ -395,7 +395,7 @@ index 1f402548..11a4f612 100644
      private static final int[][][] h = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
      private int at;
 diff --git a/src/main/java/net/minecraft/server/EntityOcelot.java b/src/main/java/net/minecraft/server/EntityOcelot.java
-index 858bbef5..50648633 100644
+index 858bbef5b..506486338 100644
 --- a/src/main/java/net/minecraft/server/EntityOcelot.java
 +++ b/src/main/java/net/minecraft/server/EntityOcelot.java
 @@ -5,7 +5,7 @@ import javax.annotation.Nullable;
@@ -408,7 +408,7 @@ index 858bbef5..50648633 100644
      private PathfinderGoalTempt bD;
      public boolean spawnBonus = true; // Spigot
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index c1a2ddcf..094e9cda 100644
+index c1a2ddcf5..094e9cdaa 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -97,6 +97,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
@@ -447,7 +447,7 @@ index c1a2ddcf..094e9cda 100644
              int i = Math.min(this.removeQueue.size(), Integer.MAX_VALUE);
              int[] aint = new int[i];
 diff --git a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
-index 8f4b63c8..73b21f48 100644
+index 8f4b63c8d..73b21f48b 100644
 --- a/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
 +++ b/src/main/java/net/minecraft/server/EntitySkeletonAbstract.java
 @@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityCombustEvent; // CraftBukkit
@@ -460,7 +460,7 @@ index 8f4b63c8..73b21f48 100644
      private final PathfinderGoalMeleeAttack c = new PathfinderGoalMeleeAttack(this, 1.2D, false) { // CraftBukkit - decompile error
          public void d() {
 diff --git a/src/main/java/net/minecraft/server/EntitySlime.java b/src/main/java/net/minecraft/server/EntitySlime.java
-index 3d3a9ca0..0dc3e492 100644
+index 3d3a9ca04..0dc3e4926 100644
 --- a/src/main/java/net/minecraft/server/EntitySlime.java
 +++ b/src/main/java/net/minecraft/server/EntitySlime.java
 @@ -7,7 +7,7 @@ import org.bukkit.event.entity.SlimeSplitEvent;
@@ -473,7 +473,7 @@ index 3d3a9ca0..0dc3e492 100644
      public float b;
      public float c;
 diff --git a/src/main/java/net/minecraft/server/EntitySpider.java b/src/main/java/net/minecraft/server/EntitySpider.java
-index 957fa577..c809ddb0 100644
+index 957fa5779..c809ddb0f 100644
 --- a/src/main/java/net/minecraft/server/EntitySpider.java
 +++ b/src/main/java/net/minecraft/server/EntitySpider.java
 @@ -5,7 +5,7 @@ import javax.annotation.Nullable;
@@ -486,7 +486,7 @@ index 957fa577..c809ddb0 100644
      public EntitySpider(World world) {
          super(world);
 diff --git a/src/main/java/net/minecraft/server/EntityTracker.java b/src/main/java/net/minecraft/server/EntityTracker.java
-index a60f9460..a6de45f5 100644
+index a60f94608..a6de45f55 100644
 --- a/src/main/java/net/minecraft/server/EntityTracker.java
 +++ b/src/main/java/net/minecraft/server/EntityTracker.java
 @@ -5,6 +5,8 @@ import com.google.common.collect.Sets;
@@ -699,7 +699,7 @@ index a60f9460..a6de45f5 100644
  
      }
 diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
-index efc4c79a..7378c58f 100644
+index efc4c79ab..7378c58f0 100644
 --- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 @@ -17,7 +17,8 @@ import org.bukkit.event.player.PlayerVelocityEvent;
@@ -736,7 +736,7 @@ index efc4c79a..7378c58f 100644
          } else if (this.tracker instanceof IAnimal) {
              this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
 diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
-index a9c4ab10..f71767dc 100644
+index a9c4ab10d..f71767dcd 100644
 --- a/src/main/java/net/minecraft/server/EntityVillager.java
 +++ b/src/main/java/net/minecraft/server/EntityVillager.java
 @@ -18,7 +18,7 @@ import org.bukkit.event.entity.VillagerReplenishTradeEvent;
@@ -749,7 +749,7 @@ index a9c4ab10..f71767dc 100644
      private boolean bB;
      private boolean bC;
 diff --git a/src/main/java/net/minecraft/server/ItemWorldMap.java b/src/main/java/net/minecraft/server/ItemWorldMap.java
-index e0799ff0..198e5c20 100644
+index e0799ff00..198e5c208 100644
 --- a/src/main/java/net/minecraft/server/ItemWorldMap.java
 +++ b/src/main/java/net/minecraft/server/ItemWorldMap.java
 @@ -294,7 +294,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
@@ -763,7 +763,7 @@ index e0799ff0..198e5c20 100644
          }
 diff --git a/src/main/java/net/pixelverse/PacketMasker.java b/src/main/java/net/pixelverse/PacketMasker.java
 new file mode 100644
-index 00000000..07cbe85b
+index 000000000..07cbe85bb
 --- /dev/null
 +++ b/src/main/java/net/pixelverse/PacketMasker.java
 @@ -0,0 +1,45 @@
@@ -814,7 +814,7 @@ index 00000000..07cbe85b
 +}
 diff --git a/src/main/java/net/pixelverse/TrackerData.java b/src/main/java/net/pixelverse/TrackerData.java
 new file mode 100644
-index 00000000..e9cf5759
+index 000000000..e9cf5759b
 --- /dev/null
 +++ b/src/main/java/net/pixelverse/TrackerData.java
 @@ -0,0 +1,59 @@
@@ -879,7 +879,7 @@ index 00000000..e9cf5759
 +}
 diff --git a/src/main/java/net/pixelverse/UnsafeHelper.java b/src/main/java/net/pixelverse/UnsafeHelper.java
 new file mode 100644
-index 00000000..64ee963c
+index 000000000..64ee963c7
 --- /dev/null
 +++ b/src/main/java/net/pixelverse/UnsafeHelper.java
 @@ -0,0 +1,74 @@
@@ -959,7 +959,7 @@ index 00000000..64ee963c
 +}
 \ No newline at end of file
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
-index 1ac549e5..cbe995d3 100644
+index 1ac549e5e..cbe995d3d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 @@ -32,7 +32,7 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
@@ -971,6 +971,78 @@ index 1ac549e5..cbe995d3 100644
  
      CraftMetaSkull(CraftMetaItem meta) {
          super(meta);
+diff --git a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+index b951bfda3..57b7a087a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
++++ b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+@@ -1,21 +1,17 @@
+ package org.bukkit.craftbukkit.map;
+ 
+-import java.util.ArrayList;
+-import java.util.Arrays;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-import java.util.logging.Level;
+-
+ import net.minecraft.server.WorldMap;
+-
+ import org.bukkit.Bukkit;
+ import org.bukkit.World;
+ import org.bukkit.craftbukkit.CraftWorld;
+ import org.bukkit.craftbukkit.entity.CraftPlayer;
++import org.bukkit.map.MapCursor;
+ import org.bukkit.map.MapRenderer;
+ import org.bukkit.map.MapView;
+ 
++import java.util.*;
++import java.util.logging.Level;
++
+ public final class CraftMapView implements MapView {
+ 
+     private final Map<CraftPlayer, RenderData> renderCache = new HashMap<CraftPlayer, RenderData>();
+@@ -33,8 +29,7 @@ public final class CraftMapView implements MapView {
+         if (text.startsWith("map_")) {
+             try {
+                 return Short.parseShort(text.substring("map_".length()));
+-            }
+-            catch (NumberFormatException ex) {
++            } catch (NumberFormatException ex) {
+                 throw new IllegalStateException("Map has non-numeric ID");
+             }
+         } else {
+@@ -115,7 +110,9 @@ public final class CraftMapView implements MapView {
+ 
+     private boolean isContextual() {
+         for (MapRenderer renderer : renderers) {
+-            if (renderer.isContextual()) return true;
++            if (renderer.isContextual()) {
++                return true;
++            }
+         }
+         return false;
+     }
+@@ -154,11 +151,18 @@ public final class CraftMapView implements MapView {
+             for (int i = 0; i < buf.length; ++i) {
+                 byte color = buf[i];
+                 // There are 208 valid color id's, 0 -> 127 and -128 -> -49
+-                if (color >= 0 || color <= -49) render.buffer[i] = color;
++                if (color >= 0 || color <= -49) {
++                    render.buffer[i] = color;
++                }
+             }
+ 
+             for (int i = 0; i < canvas.getCursors().size(); ++i) {
+-                render.cursors.add(canvas.getCursors().getCursor(i));
++                MapCursor cursor = canvas.getCursors().getCursor(i);
++
++                if (cursor != null) {
++                    render.cursors.add(canvas.getCursors().getCursor(i));
++                }
++
+             }
+         }
+ 
 -- 
 2.13.3.windows.1
 

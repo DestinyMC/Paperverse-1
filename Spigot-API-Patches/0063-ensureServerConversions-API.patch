@@ -1,4 +1,4 @@
-From 8c7f590319e0322c7b6d85b44bbc280328f84e93 Mon Sep 17 00:00:00 2001
+From b6f5144228b36316c4348844387351d19cc89f7b Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 4 May 2016 23:55:48 -0400
 Subject: [PATCH] ensureServerConversions API
@@ -29,7 +29,7 @@ index 52a8d4d8..99b90629 100644
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 188ae6d7..6bb19b9d 100644
+index cd5a91f9..268f987e 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -556,7 +556,7 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
@@ -61,5 +61,5 @@ index 188ae6d7..6bb19b9d 100644
 +    // Paper end
  }
 -- 
-2.15.1
+2.13.3.windows.1
 

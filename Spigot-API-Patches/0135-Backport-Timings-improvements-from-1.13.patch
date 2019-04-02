@@ -1,4 +1,4 @@
-From 9277043e679dca5dbf7513983030aa7a79bf3afb Mon Sep 17 00:00:00 2001
+From 21141e9b6dc87b2ab8d7dacaff1b4d344e374e21 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 17 Oct 2018 21:58:27 -0400
 Subject: [PATCH] Backport Timings improvements from 1.13
@@ -388,6 +388,62 @@ index f2dd46f2..a0801fd5 100644
      /**
       * Get the result of this recipe.
       *
+diff --git a/src/main/java/org/bukkit/map/MapCursorCollection.java b/src/main/java/org/bukkit/map/MapCursorCollection.java
+index 1dc9025d..87ff6726 100644
+--- a/src/main/java/org/bukkit/map/MapCursorCollection.java
++++ b/src/main/java/org/bukkit/map/MapCursorCollection.java
+@@ -26,6 +26,10 @@ public final class MapCursorCollection {
+      * @return The MapCursor.
+      */
+     public MapCursor getCursor(int index) {
++        if (cursors.isEmpty()) {
++            return null;
++        }
++
+         return cursors.get(index);
+     }
+ 
+@@ -53,8 +57,8 @@ public final class MapCursorCollection {
+     /**
+      * Add a cursor to the collection.
+      *
+-     * @param x The x coordinate, from -128 to 127.
+-     * @param y The y coordinate, from -128 to 127.
++     * @param x         The x coordinate, from -128 to 127.
++     * @param y         The y coordinate, from -128 to 127.
+      * @param direction The facing of the cursor, from 0 to 15.
+      * @return The newly added MapCursor.
+      */
+@@ -65,10 +69,10 @@ public final class MapCursorCollection {
+     /**
+      * Add a cursor to the collection.
+      *
+-     * @param x The x coordinate, from -128 to 127.
+-     * @param y The y coordinate, from -128 to 127.
++     * @param x         The x coordinate, from -128 to 127.
++     * @param y         The y coordinate, from -128 to 127.
+      * @param direction The facing of the cursor, from 0 to 15.
+-     * @param type The type (color/style) of the map cursor.
++     * @param type      The type (color/style) of the map cursor.
+      * @return The newly added MapCursor.
+      * @deprecated Magic value
+      */
+@@ -80,11 +84,11 @@ public final class MapCursorCollection {
+     /**
+      * Add a cursor to the collection.
+      *
+-     * @param x The x coordinate, from -128 to 127.
+-     * @param y The y coordinate, from -128 to 127.
++     * @param x         The x coordinate, from -128 to 127.
++     * @param y         The y coordinate, from -128 to 127.
+      * @param direction The facing of the cursor, from 0 to 15.
+-     * @param type The type (color/style) of the map cursor.
+-     * @param visible Whether the cursor is visible.
++     * @param type      The type (color/style) of the map cursor.
++     * @param visible   Whether the cursor is visible.
+      * @return The newly added MapCursor.
+      * @deprecated Magic value
+      */
 -- 
 2.13.3.windows.1
 
