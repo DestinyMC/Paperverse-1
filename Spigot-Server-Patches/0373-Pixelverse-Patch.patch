@@ -1,4 +1,4 @@
-From dca4959e14bfdf2313ef07ba212719effa4e9e44 Mon Sep 17 00:00:00 2001
+From 4c4591b2b9fa5d5e2289b597c81586ab136c9479 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Thu, 24 Jan 2019 00:39:58 -0500
 Subject: [PATCH] Pixelverse Patch
@@ -761,6 +761,19 @@ index e0799ff00..198e5c208 100644
              }
  
          }
+diff --git a/src/main/java/net/minecraft/server/WorldMap.java b/src/main/java/net/minecraft/server/WorldMap.java
+index 59173605e..0f07ba468 100644
+--- a/src/main/java/net/minecraft/server/WorldMap.java
++++ b/src/main/java/net/minecraft/server/WorldMap.java
+@@ -358,7 +358,7 @@ public class WorldMap extends PersistentBase {
+ 
+             for ( org.bukkit.map.MapCursor cursor : render.cursors) {
+ 
+-                if (cursor.isVisible()) {
++                if (cursor != null && cursor.isVisible()) {
+                     icons.add(new MapIcon(MapIcon.Type.a(cursor.getRawType()), cursor.getX(), cursor.getY(), cursor.getDirection()));
+                 }
+             }
 diff --git a/src/main/java/net/pixelverse/PacketMasker.java b/src/main/java/net/pixelverse/PacketMasker.java
 new file mode 100644
 index 000000000..07cbe85bb

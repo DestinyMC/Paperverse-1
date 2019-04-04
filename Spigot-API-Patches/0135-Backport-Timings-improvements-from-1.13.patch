@@ -1,4 +1,4 @@
-From 21141e9b6dc87b2ab8d7dacaff1b4d344e374e21 Mon Sep 17 00:00:00 2001
+From 606e0fa2648e0f293915adcb1f7ea2baf78288a9 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Wed, 17 Oct 2018 21:58:27 -0400
 Subject: [PATCH] Backport Timings improvements from 1.13
@@ -358,6 +358,27 @@ index 1474384e..9a4f9dca 100644
      }
  
      private static class AutoInstantiatingLoader<K, V> implements Function<K, V> {
+diff --git a/src/main/java/org/bukkit/inventory/FurnaceRecipe.java b/src/main/java/org/bukkit/inventory/FurnaceRecipe.java
+index b1774d6d..66b8fec0 100644
+--- a/src/main/java/org/bukkit/inventory/FurnaceRecipe.java
++++ b/src/main/java/org/bukkit/inventory/FurnaceRecipe.java
+@@ -109,6 +109,16 @@ public class FurnaceRecipe implements Recipe {
+     }
+ 
+     /**
++     * Set the input material.
++     *
++     * @return The input material.
++     */
++    public FurnaceRecipe setInput(ItemStack input) {
++        this.ingredient = input;
++        return this;
++    }
++
++    /**
+      * Get the input material.
+      *
+      * @return The input material.
 diff --git a/src/main/java/org/bukkit/inventory/ShapedRecipe.java b/src/main/java/org/bukkit/inventory/ShapedRecipe.java
 index d7fa6d28..dbd187d3 100644
 --- a/src/main/java/org/bukkit/inventory/ShapedRecipe.java
@@ -389,14 +410,14 @@ index f2dd46f2..a0801fd5 100644
       * Get the result of this recipe.
       *
 diff --git a/src/main/java/org/bukkit/map/MapCursorCollection.java b/src/main/java/org/bukkit/map/MapCursorCollection.java
-index 1dc9025d..87ff6726 100644
+index 1dc9025d..ebc99707 100644
 --- a/src/main/java/org/bukkit/map/MapCursorCollection.java
 +++ b/src/main/java/org/bukkit/map/MapCursorCollection.java
 @@ -26,6 +26,10 @@ public final class MapCursorCollection {
       * @return The MapCursor.
       */
      public MapCursor getCursor(int index) {
-+        if (cursors.isEmpty()) {
++        if (cursors.size() <= index) {
 +            return null;
 +        }
 +
