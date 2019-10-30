@@ -1,4 +1,4 @@
-From f9190f756fad99e0f3dd79bfabfbbf310d7ffc29 Mon Sep 17 00:00:00 2001
+From bf353c710e47c9b12149aad38f458b51f973bafd Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 27 Dec 2016 15:02:42 -0500
 Subject: [PATCH] String based Action Bar API
@@ -42,14 +42,13 @@ index c96f3ed17..1f6a12632 100644
      public static boolean isMainThread() {
          return MinecraftServer.getServer().isMainThread();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index d854d4844..d06415382 100644
+index 151dcf243..be3c431eb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -217,6 +217,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
-     }
+@@ -218,6 +218,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      // Paper start
-+    @Override
+     @Override
 +    public void sendActionBar(String message) {
 +        if (getHandle().playerConnection == null || message == null || message.isEmpty()) return;
 +        getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new net.minecraft.server.ChatComponentText(message), net.minecraft.server.ChatMessageType.GAME_INFO));
@@ -61,9 +60,10 @@ index d854d4844..d06415382 100644
 +        sendActionBar(org.bukkit.ChatColor.translateAlternateColorCodes(alternateChar, message));
 +    }
 +
-     @Override
++    @Override
      public void setPlayerListHeaderFooter(BaseComponent[] header, BaseComponent[] footer) {
           if (header != null) {
+              String headerJson = net.md_5.bungee.chat.ComponentSerializer.toString(header);
 -- 
-2.22.0
+2.13.3.windows.1
 

@@ -1,0 +1,697 @@
+From 74b2320c783c4c06505a04300bffce771335a084 Mon Sep 17 00:00:00 2001
+From: apollosoftware <contact@apollosoftware.io>
+Date: Wed, 30 Oct 2019 06:40:30 -0700
+Subject: [PATCH] Pixelverse Patch
+
+
+diff --git a/src/main/java/net/minecraft/server/AxisAlignedBB.java b/src/main/java/net/minecraft/server/AxisAlignedBB.java
+index c950139c0..0efa2d184 100644
+--- a/src/main/java/net/minecraft/server/AxisAlignedBB.java
++++ b/src/main/java/net/minecraft/server/AxisAlignedBB.java
+@@ -6,12 +6,17 @@ import javax.annotation.Nullable;
+ 
+ public class AxisAlignedBB {
+ 
+-    public final double minX;
+-    public final double minY;
+-    public final double minZ;
+-    public final double maxX;
+-    public final double maxY;
+-    public final double maxZ;
++    // Pixelverse start
++    public double minX;
++    public double minY;
++    public double minZ;
++    public double maxX;
++    public double maxY;
++    public double maxZ;
++    // Pixelverse end
++
++    public AxisAlignedBB() {
++    }
+ 
+     public AxisAlignedBB(double d0, double d1, double d2, double d3, double d4, double d5) {
+         this.minX = Math.min(d0, d3);
+@@ -22,6 +27,22 @@ public class AxisAlignedBB {
+         this.maxZ = Math.max(d2, d5);
+     }
+ 
++    // Pixelverse start
++    public AxisAlignedBB e(double d0) {
++        return new AxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, d0, this.maxZ);
++    }
++
++    public AxisAlignedBB mutateSet(AxisAlignedBB other) {
++        this.minX = other.minX;
++        this.minY = other.minY;
++        this.minZ = other.minZ;
++        this.maxX = other.maxX;
++        this.maxY = other.maxY;
++        this.maxZ = other.maxZ;
++        return this;
++    }
++    // Pixelverse end
++
+     public AxisAlignedBB(BlockPosition blockposition) {
+         this((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1));
+     }
+@@ -108,7 +129,10 @@ public class AxisAlignedBB {
+         return this.b(vec3d.x, vec3d.y, vec3d.z);
+     }
+ 
+-    public final AxisAlignedBB expand(double x, double y, double z) { return b(x, y, z); } // Paper - OBFHELPER
++    public final AxisAlignedBB expand(double x, double y, double z) {
++        return b(x, y, z);
++    } // Paper - OBFHELPER
++
+     public AxisAlignedBB b(double d0, double d1, double d2) {
+         double d3 = this.minX;
+         double d4 = this.minY;
+@@ -201,7 +225,10 @@ public class AxisAlignedBB {
+         return this.minX < d3 && this.maxX > d0 && this.minY < d4 && this.maxY > d1 && this.minZ < d5 && this.maxZ > d2;
+     }
+ 
+-    public final boolean contains(Vec3D vec3d) { return c(vec3d); } // Paper - OBFHELPER
++    public final boolean contains(Vec3D vec3d) {
++        return c(vec3d);
++    } // Paper - OBFHELPER
++
+     public boolean c(Vec3D vec3d) {
+         return this.e(vec3d.x, vec3d.y, vec3d.z);
+     }
+@@ -234,7 +261,10 @@ public class AxisAlignedBB {
+         return this.g(-d0);
+     }
+ 
+-    public final Optional<Vec3D> calculateIntercept(Vec3D vec3d, Vec3D vec3d1) { return b(vec3d, vec3d1); } // Paper - OBFHELPER
++    public final Optional<Vec3D> calculateIntercept(Vec3D vec3d, Vec3D vec3d1) {
++        return b(vec3d, vec3d1);
++    } // Paper - OBFHELPER
++
+     public Optional<Vec3D> b(Vec3D vec3d, Vec3D vec3d1) {
+         double[] adouble = new double[]{1.0D};
+         double d0 = vec3d1.x - vec3d.x;
+diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
+index e8def7f81..12ad40709 100644
+--- a/src/main/java/net/minecraft/server/Entity.java
++++ b/src/main/java/net/minecraft/server/Entity.java
+@@ -17,6 +17,8 @@ import java.util.UUID;
+ import java.util.concurrent.atomic.AtomicInteger;
+ import java.util.stream.Stream;
+ import javax.annotation.Nullable;
++
++import net.pixelverse.PacketMasker; // Pixelverse
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
+@@ -50,7 +52,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
+ import org.bukkit.plugin.PluginManager;
+ // CraftBukkit end
+ 
+-public abstract class Entity implements INamableTileEntity, ICommandListener, KeyedObject { // Paper
++public abstract class Entity implements INamableTileEntity, ICommandListener, KeyedObject {
+ 
+     // CraftBukkit start
+     private static final int CURRENT_LEVEL = 2;
+@@ -102,7 +104,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     public boolean i; public final boolean blocksEntitySpawning() { return this.i; } // Paper - OBFHELPER
+     public final List<Entity> passengers;
+     protected int j;
+-    private Entity vehicle;
++    public Entity vehicle; // Pixelverse
+     public boolean attachedToPlayer;
+     public World world;
+     public double lastX;
+@@ -111,12 +113,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     public double locX;
+     public double locY;
+     public double locZ;
+-    private Vec3D mot;
++    public Vec3D mot; // Pixelverse
+     public float yaw;
+     public float pitch;
+     public float lastYaw;
+     public float lastPitch;
+-    private AxisAlignedBB boundingBox;
++    public AxisAlignedBB boundingBox; // Pixelverse
+     public boolean onGround;
+     public boolean positionChanged;
+     public boolean y;
+@@ -147,13 +149,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     public int noDamageTicks;
+     protected boolean justCreated;
+     protected final DataWatcher datawatcher;
+-    protected static final DataWatcherObject<Byte> W = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
+-    private static final DataWatcherObject<Integer> AIR_TICKS = DataWatcher.a(Entity.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Optional<IChatBaseComponent>> az = DataWatcher.a(Entity.class, DataWatcherRegistry.f);
+-    private static final DataWatcherObject<Boolean> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+-    private static final DataWatcherObject<Boolean> aB = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+-    private static final DataWatcherObject<Boolean> aC = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
+-    protected static final DataWatcherObject<EntityPose> POSE = DataWatcher.a(Entity.class, DataWatcherRegistry.s);
++    // Pixelverse start
++    public static final DataWatcherObject<Byte> W = DataWatcher.a(Entity.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Integer> AIR_TICKS = DataWatcher.a(Entity.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Optional<IChatBaseComponent>> az = DataWatcher.a(Entity.class, DataWatcherRegistry.f);
++    public static final DataWatcherObject<Boolean> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
++    public static final DataWatcherObject<Boolean> aB = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
++    public static final DataWatcherObject<Boolean> aC = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
++    public static final DataWatcherObject<EntityPose> POSE = DataWatcher.a(Entity.class, DataWatcherRegistry.s);
++    // Pixelverse end
+     public boolean inChunk; public boolean isAddedToChunk() { return inChunk; } // Paper - OBFHELPER
+     public int chunkX; public int getChunkX() { return chunkX; } // Paper - OBFHELPER
+     public int chunkY; public int getChunkY() { return chunkY; } // Paper - OBFHELPER
+@@ -175,7 +179,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     private boolean aF;
+     private final double[] aG;
+     private long aH;
+-    private EntitySize size;
++    public EntitySize size; // Pixelverse
+     private float headHeight;
+     // CraftBukkit start
+     public boolean persist = true;
+@@ -185,7 +189,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+     public Timing tickTimer = MinecraftTimings.getEntityTimings(this); // Paper
+     public Location origin; // Paper
+     // Spigot start
+-    public final org.spigotmc.ActivationRange.ActivationType activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
++    public org.spigotmc.ActivationRange.ActivationType activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this); // Pixelverse
+     public final boolean defaultActivationState;
+     public long activatedTick = Integer.MIN_VALUE;
+     public boolean fromMobSpawner;
+@@ -244,6 +248,66 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+         this.headHeight = this.getHeadHeight(EntityPose.STANDING, this.size);
+     }
+ 
++    // Pixelverse start
++    public boolean isBasicEntity() {
++        return false;
++    }
++
++    public boolean canBeCollidedWith() {
++        return true;
++    }
++
++    public final boolean isCollidedHorizontally() {
++        return this.positionChanged;
++    }
++
++    public final void setCollidedHorizontally(boolean collidedHorizontally) {
++        this.positionChanged = collidedHorizontally;
++    }
++
++    public final boolean isCollidedVertically() {
++        return this.y;
++    }
++
++    public final void setCollidedVertically(boolean collidedVertically) {
++        this.y = collidedVertically;
++    }
++
++    public final float getStepHeight() {
++        return this.K;
++    }
++
++    public final void setStepHeight(float stepHeight) {
++        this.K = stepHeight;
++    }
++
++    public boolean hasAlternateTrackerUpdateFrequency() {
++        return false;
++    }
++
++    public int getAlternateTrackerUpdateFrequency() {
++        return 3;
++    }
++
++    public void onEnterTracking(EntityPlayer entityplayer) {
++
++    }
++
++    public void onLeaveTracking(EntityPlayer player) {
++    }
++
++    public void onUpdateTracking(EntityPlayer player) {
++    }
++
++    public Packet getSpawnPacket() {
++        return null;
++    }
++
++    public boolean canObserve(EntityPlayer player) {
++        return true;
++    }
++    // Pixelverse end
++
+     public boolean isSpectator() {
+         return false;
+     }
+@@ -3253,7 +3317,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+         return this.size.height;
+     }
+ 
+-    public abstract Packet<?> N();
++    // Pixelverse start
++    public Packet<?> N() {
++        return this.getSpawnPacket();
++    }
++    // Pixelverse end
+ 
+     public EntitySize a(EntityPose entitypose) {
+         return this.f.k();
+diff --git a/src/main/java/net/minecraft/server/EntityCreeper.java b/src/main/java/net/minecraft/server/EntityCreeper.java
+index bcb727630..6fb88c210 100644
+--- a/src/main/java/net/minecraft/server/EntityCreeper.java
++++ b/src/main/java/net/minecraft/server/EntityCreeper.java
+@@ -9,10 +9,11 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
+ // CraftBukkit end
+ 
+ public class EntityCreeper extends EntityMonster {
+-
+-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
+-    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i); private static final DataWatcherObject<Boolean> isIgnitedDW = d; // Paper OBFHELPER
++    // Pixelverse start
++    public static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
++    public static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i); private static final DataWatcherObject<Boolean> isIgnitedDW = d; // Paper OBFHELPER
++    // Pixelverse end
+     private int bz;
+     public int fuseTicks; // Paper - public
+     public int maxFuseTicks = 30;
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index cd73cde8d..997878642 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -32,13 +32,15 @@ public abstract class EntityHuman extends EntityLiving {
+ 
+     public static final EntitySize bs = EntitySize.b(0.6F, 1.8F);
+     // CraftBukkit - decompile error
+-    private static final Map<EntityPose, EntitySize> b = ImmutableMap.<EntityPose, EntitySize>builder().put(EntityPose.STANDING, EntityHuman.bs).put(EntityPose.SLEEPING, EntityHuman.as).put(EntityPose.FALL_FLYING, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SWIMMING, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SPIN_ATTACK, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SNEAKING, EntitySize.b(0.6F, 1.5F)).put(EntityPose.DYING, EntitySize.c(0.2F, 0.2F)).build();
+-    private static final DataWatcherObject<Float> c = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> d = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.b);
+-    protected static final DataWatcherObject<Byte> bt = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
+-    protected static final DataWatcherObject<Byte> bu = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
+-    protected static final DataWatcherObject<NBTTagCompound> bv = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.p);
+-    protected static final DataWatcherObject<NBTTagCompound> bw = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.p);
++    // Pixelverse start
++    public static final Map<EntityPose, EntitySize> b = ImmutableMap.<EntityPose, EntitySize>builder().put(EntityPose.STANDING, EntityHuman.bs).put(EntityPose.SLEEPING, EntityHuman.as).put(EntityPose.FALL_FLYING, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SWIMMING, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SPIN_ATTACK, EntitySize.b(0.6F, 0.6F)).put(EntityPose.SNEAKING, EntitySize.b(0.6F, 1.5F)).put(EntityPose.DYING, EntitySize.c(0.2F, 0.2F)).build();
++    public static final DataWatcherObject<Float> c = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.c);
++    public static final DataWatcherObject<Integer> d = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Byte> bt = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> bu = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<NBTTagCompound> bv = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.p);
++    public static final DataWatcherObject<NBTTagCompound> bw = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.p);
++    // Pixelverse end
+     private long e;
+     public final PlayerInventory inventory = new PlayerInventory(this);
+     protected InventoryEnderChest enderChest = new InventoryEnderChest(this); // CraftBukkit - add "this" to constructor
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index d00e99cdb..d370783e8 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -23,7 +23,7 @@ import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
+ 
+ public abstract class EntityInsentient extends EntityLiving {
+ 
+-    private static final DataWatcherObject<Byte> b = DataWatcher.a(EntityInsentient.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> b = DataWatcher.a(EntityInsentient.class, DataWatcherRegistry.a); // Pixelverse
+     public int e;
+     protected int f;
+     protected ControllerLook lookController;
+diff --git a/src/main/java/net/minecraft/server/EntityIronGolem.java b/src/main/java/net/minecraft/server/EntityIronGolem.java
+index 8e463111b..b97351f56 100644
+--- a/src/main/java/net/minecraft/server/EntityIronGolem.java
++++ b/src/main/java/net/minecraft/server/EntityIronGolem.java
+@@ -2,7 +2,7 @@ package net.minecraft.server;
+ 
+ public class EntityIronGolem extends EntityGolem {
+ 
+-    protected static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
++    public static final DataWatcherObject<Byte> b = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a); // Pixelverse
+     private int c;
+     private int d;
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
+index df26cef6a..df0d03d74 100644
+--- a/src/main/java/net/minecraft/server/EntityItem.java
++++ b/src/main/java/net/minecraft/server/EntityItem.java
+@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerAttemptPickupItemEvent; // Paper
+ 
+ public class EntityItem extends Entity {
+ 
+-    private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
++    public static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g); // Pixelverse
+     public int age;
+     public int pickupDelay;
+     private int f;
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index f675ad2f5..255ad520e 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -42,12 +42,14 @@ public abstract class EntityLiving extends Entity {
+ 
+     private static final UUID b = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
+     private static final AttributeModifier c = (new AttributeModifier(EntityLiving.b, "Sprinting speed boost", 0.30000001192092896D, AttributeModifier.Operation.MULTIPLY_TOTAL)).a(false);
+-    protected static final DataWatcherObject<Byte> ar = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.a);
++    // Pixelvere start
++    public static final DataWatcherObject<Byte> ar = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.a);
+     public static final DataWatcherObject<Float> HEALTH = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.i);
+-    private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Optional<BlockPosition>> bs = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.m);
++    public static final DataWatcherObject<Integer> e = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.i);
++    public static final DataWatcherObject<Integer> g = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Optional<BlockPosition>> bs = DataWatcher.a(EntityLiving.class, DataWatcherRegistry.m);
++    // Pixelvere end
+     protected static final EntitySize as = EntitySize.c(0.2F, 0.2F);
+     private AttributeMapBase attributeMap;
+     public CombatTracker combatTracker = new CombatTracker(this);
+diff --git a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+index 6df2930e2..f53ce716e 100644
+--- a/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
++++ b/src/main/java/net/minecraft/server/EntityMinecartAbstract.java
+@@ -15,12 +15,14 @@ import org.bukkit.util.Vector;
+ 
+ public abstract class EntityMinecartAbstract extends Entity {
+ 
+-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Integer> c = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Float> d = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.c);
+-    private static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
+-    private static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.i);
++    // Pixelverse start
++    public static final DataWatcherObject<Integer> b = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> c = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Float> d = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.c);
++    public static final DataWatcherObject<Integer> e = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Boolean> g = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.i);
++    // Pixelverse end
+     private boolean ar;
+     private static final int[][][] as = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
+     private int at;
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index fa79d0bed..dbfd3f82c 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -100,6 +100,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     public Integer clientViewDistance;
+     // CraftBukkit end
+ 
++    private Runnable tickAdapter; // Pixelverse
++
+     public EntityPlayer(MinecraftServer minecraftserver, WorldServer worldserver, GameProfile gameprofile, PlayerInteractManager playerinteractmanager) {
+         super((World) worldserver, gameprofile);
+         playerinteractmanager.player = this;
+@@ -118,6 +120,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+         this.cachedSingleMobDistanceMap = new com.destroystokyo.paper.util.PooledHashSets.PooledObjectLinkedOpenHashSet<>(this); // Paper
+     }
+ 
++    // Pixelverse start
++    public Runnable getTickAdapter() {
++        return tickAdapter;
++    }
++
++    public void setTickAdapter(Runnable tickAdapter) {
++        this.tickAdapter = tickAdapter;
++    }
++    // Pixelverse end
++
+     // Yes, this doesn't match Vanilla, but it's the best we can do for now.
+     // If this is an issue, PRs are welcome
+     public final BlockPosition getSpawnPoint(WorldServer worldserver) {
+diff --git a/src/main/java/net/minecraft/server/EntitySlime.java b/src/main/java/net/minecraft/server/EntitySlime.java
+index 253ff9594..52d2f85dc 100644
+--- a/src/main/java/net/minecraft/server/EntitySlime.java
++++ b/src/main/java/net/minecraft/server/EntitySlime.java
+@@ -21,7 +21,7 @@ import org.bukkit.event.entity.SlimeSplitEvent;
+ 
+ public class EntitySlime extends EntityInsentient implements IMonster {
+ 
+-    private static final DataWatcherObject<Integer> bz = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
++    public static final DataWatcherObject<Integer> bz = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b); // Pixelverse
+     public float b;
+     public float c;
+     public float d;
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index 460c687d3..6b48482f1 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -7,6 +7,7 @@ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Set;
+ import java.util.function.Consumer;
++
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
+@@ -18,11 +19,17 @@ import org.bukkit.event.player.PlayerVelocityEvent;
+ public class EntityTrackerEntry {
+ 
+     private static final Logger LOGGER = LogManager.getLogger();
++    public int trackerLocation = -1; // Pixelverse
+     private final WorldServer b;
+-    private final Entity tracker;
++    public final Entity tracker; // Pixelverse
+     private final int d;
+     private final boolean e;
+-    private final Consumer<Packet<?>> f; private Consumer<Packet<?>> getPacketConsumer() { return f; } // Paper - OBFHELPER
++    private final Consumer<Packet<?>> f;
++
++    private Consumer<Packet<?>> getPacketConsumer() {
++        return f;
++    } // Paper - OBFHELPER
++
+     private long xLoc;
+     private long yLoc;
+     private long zLoc;
+@@ -270,6 +277,12 @@ public class EntityTrackerEntry {
+             // CraftBukkit end
+         }
+ 
++        // Pixelverse start
++        if (!this.tracker.canObserve(entityplayer)) {
++            return;
++        }
++        // Pixelverse end
++
+         Packet<?> packet = this.tracker.N();
+ 
+         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
+diff --git a/src/main/java/net/minecraft/server/EntityVillager.java b/src/main/java/net/minecraft/server/EntityVillager.java
+index 7f747fac9..a58f18a9c 100644
+--- a/src/main/java/net/minecraft/server/EntityVillager.java
++++ b/src/main/java/net/minecraft/server/EntityVillager.java
+@@ -29,7 +29,7 @@ import org.bukkit.event.entity.VillagerReplenishTradeEvent;
+ 
+ public class EntityVillager extends EntityVillagerAbstract implements ReputationHandler, VillagerDataHolder {
+ 
+-    private static final DataWatcherObject<VillagerData> bC = DataWatcher.a(EntityVillager.class, DataWatcherRegistry.q);
++    public static final DataWatcherObject<VillagerData> bC = DataWatcher.a(EntityVillager.class, DataWatcherRegistry.q); // Pixelverse
+     public static final Map<Item, Integer> bA = ImmutableMap.of(Items.BREAD, 4, Items.POTATO, 1, Items.CARROT, 1, Items.BEETROOT, 1);
+     private static final Set<Item> bD = ImmutableSet.of(Items.BREAD, Items.POTATO, Items.CARROT, Items.WHEAT, Items.WHEAT_SEEDS, Items.BEETROOT, new Item[]{Items.BEETROOT_SEEDS});
+     private int bE;
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 0b0058138..52f5ededd 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1318,12 +1318,14 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+ 
+             // Spigot Start
+             boolean eulaAgreed = Boolean.getBoolean( "com.mojang.eula.agree" );
+-            if ( eulaAgreed )
+-            {
+-                System.err.println( "You have used the Spigot command line EULA agreement flag." );
+-                System.err.println( "By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula)." );
+-                System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
+-            }
++            // Pixelverse start
++//            if ( eulaAgreed )
++//            {
++//                System.err.println( "You have used the Spigot command line EULA agreement flag." );
++//                System.err.println( "By using this setting you are indicating your agreement to Mojang's EULA (https://account.mojang.com/documents/minecraft_eula)." );
++//                System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
++//            }
++            // Pixelverse End
+             // Spigot End
+             if (!eula.a() && !eulaAgreed) { // Spigot
+                 MinecraftServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+diff --git a/src/main/java/net/minecraft/server/WorldMap.java b/src/main/java/net/minecraft/server/WorldMap.java
+index 090d3dbd3..622713a35 100644
+--- a/src/main/java/net/minecraft/server/WorldMap.java
++++ b/src/main/java/net/minecraft/server/WorldMap.java
+@@ -469,14 +469,14 @@ public class WorldMap extends PersistentBase {
+ 
+             for ( org.bukkit.map.MapCursor cursor : render.cursors) {
+ 
+-                if (cursor.isVisible()) {
++                if (cursor != null && cursor.isVisible()) { // Pixelverse
+                     icons.add(new MapIcon(MapIcon.Type.a(cursor.getRawType()), cursor.getX(), cursor.getY(), cursor.getDirection(), CraftChatMessage.fromStringOrNull(cursor.getCaption())));
+                 }
+             }
+ 
+             if (this.d) {
+                 this.d = false;
+-                return new PacketPlayOutMap(ItemWorldMap.e(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, icons, render.buffer, this.e, this.f, this.g + 1 - this.e, this.h + 1 - this.f);
++                return new PacketPlayOutMap(ItemWorldMap.e(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, icons, render.buffer, this.e, this.f, Math.max(0, this.g + 1 - this.e), Math.max(0, this.h + 1 - this.f)); // Pixelverse
+             } else {
+                 return this.i++ % 5 == 0 ? new PacketPlayOutMap(ItemWorldMap.e(itemstack), WorldMap.this.scale, WorldMap.this.track, WorldMap.this.locked, icons, render.buffer, 0, 0, 0, 0) : null;
+             }
+diff --git a/src/main/java/net/pixelverse/PacketMasker.java b/src/main/java/net/pixelverse/PacketMasker.java
+new file mode 100644
+index 000000000..5265717d2
+--- /dev/null
++++ b/src/main/java/net/pixelverse/PacketMasker.java
+@@ -0,0 +1,25 @@
++package net.pixelverse;
++
++import net.minecraft.server.*;
++
++/**
++ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * All rights reserved. No part of this publication may be reproduced, distributed, or
++ * transmitted in any form or by any means, including photocopying, recording, or other
++ * electronic or mechanical methods, without the prior written permission of the publisher,
++ * except in the case of brief quotations embodied in critical reviews and certain other
++ * noncommercial uses permitted by copyright law.
++ */
++
++
++public interface PacketMasker {
++
++    public Packet getSpawnPacket(Entity var1);
++
++    public void onEnterTracking(Entity var1, EntityPlayer var2);
++
++    public void onLeaveTracking(Entity var1, EntityPlayer var2);
++
++    public void onUpdateTracking(Entity var1, EntityPlayer var2);
++
++}
+diff --git a/src/main/java/net/pixelverse/UnsafeHelper.java b/src/main/java/net/pixelverse/UnsafeHelper.java
+new file mode 100644
+index 000000000..64ee963c7
+--- /dev/null
++++ b/src/main/java/net/pixelverse/UnsafeHelper.java
+@@ -0,0 +1,74 @@
++package net.pixelverse;
++
++
++import sun.misc.Unsafe;
++
++import java.lang.reflect.Field;
++
++/**
++ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * All rights reserved. No part of this publication may be reproduced, distributed, or
++ * transmitted in any form or by any means, including photocopying, recording, or other
++ * electronic or mechanical methods, without the prior written permission of the publisher,
++ * except in the case of brief quotations embodied in critical reviews and certain other
++ * noncommercial uses permitted by copyright law.
++ */
++
++public class UnsafeHelper {
++    public static final Unsafe UNSAFE;
++
++    static {
++        try {
++            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
++            theUnsafe.setAccessible(true);
++            UNSAFE = (Unsafe) theUnsafe.get(null);
++        } catch (Exception e) {
++            throw new IllegalStateException("Error while getting Unsafe", e);
++        }
++    }
++
++    public static long getOffset(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.objectFieldOffset(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find offset", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++
++    public static long getStaticOffset(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.staticFieldOffset(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find offset", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++
++    public static Object getStaticBase(Class<?> parent, Class<?> expectedType, String fieldName) {
++        try {
++            Field field = parent.getDeclaredField(fieldName);
++            field.setAccessible(true);
++            if (!expectedType.isAssignableFrom(field.getType())) {
++                throw new IllegalArgumentException("Expected type of '" + expectedType.getSimpleName() + "' does not match actualy type of '" + field.getType().getSimpleName() + "'.");
++            }
++            return UNSAFE.staticFieldBase(field);
++        } catch (NoSuchFieldException ex) {
++            throw new IllegalArgumentException("Couldn't find base", ex);
++        } catch (SecurityException ex) {
++            throw new IllegalArgumentException("Security problem", ex);
++        }
++    }
++}
+\ No newline at end of file
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
+index aee97b9f0..20ae2f9a0 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
+@@ -28,7 +28,7 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
+     static final ItemMetaKey SKULL_OWNER = new ItemMetaKey("SkullOwner", "skull-owner");
+     static final int MAX_OWNER_LENGTH = 16;
+ 
+-    private GameProfile profile;
++    public GameProfile profile; // Pixelverse
+ 
+     CraftMetaSkull(CraftMetaItem meta) {
+         super(meta);
+diff --git a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+index f44ef67af..e6ee01263 100644
+--- a/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
++++ b/src/main/java/org/bukkit/craftbukkit/map/CraftMapView.java
+@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
+ import org.bukkit.World;
+ import org.bukkit.craftbukkit.CraftWorld;
+ import org.bukkit.craftbukkit.entity.CraftPlayer;
++import org.bukkit.map.MapCursor;
+ import org.bukkit.map.MapRenderer;
+ import org.bukkit.map.MapView;
+ 
+@@ -169,7 +170,13 @@ public final class CraftMapView implements MapView {
+             }
+ 
+             for (int i = 0; i < canvas.getCursors().size(); ++i) {
+-                render.cursors.add(canvas.getCursors().getCursor(i));
++                // Pixelverse start
++                MapCursor cursor = canvas.getCursors().getCursor(i);
++
++                if(cursor != null) {
++                    render.cursors.add(canvas.getCursors().getCursor(i));
++                }
++                // Pixelverse end
+             }
+         }
+ 
+-- 
+2.13.3.windows.1
+

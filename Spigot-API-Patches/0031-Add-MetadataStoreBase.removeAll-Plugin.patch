@@ -1,4 +1,4 @@
-From a63c6275864661b88d37ebb5870a53c978d2498d Mon Sep 17 00:00:00 2001
+From 578a341a4540b04a7ca46820ffe2fbd9b8d4ebf6 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 16 Jul 2013 21:26:50 -0400
 Subject: [PATCH] Add MetadataStoreBase.removeAll(Plugin)
@@ -6,7 +6,7 @@ Subject: [PATCH] Add MetadataStoreBase.removeAll(Plugin)
 So that on reload, metadata will be cleared
 
 diff --git a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java b/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
-index b3d85d973..0e8cd85c7 100644
+index b3d85d97..0e8cd85c 100644
 --- a/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
 +++ b/src/main/java/org/bukkit/metadata/MetadataStoreBase.java
 @@ -4,6 +4,7 @@ import java.util.ArrayList;
@@ -17,11 +17,10 @@ index b3d85d973..0e8cd85c7 100644
  import java.util.List;
  import java.util.Map;
  import java.util.WeakHashMap;
-@@ -130,6 +131,26 @@ public abstract class MetadataStoreBase<T> {
-         }
+@@ -131,6 +132,26 @@ public abstract class MetadataStoreBase<T> {
      }
  
-+    /**
+     /**
 +     * Removes all metadata in the metadata store that originates from the
 +     * given plugin.
 +     *
@@ -41,9 +40,10 @@ index b3d85d973..0e8cd85c7 100644
 +        }
 +    }
 +
-     /**
++    /**
       * Creates a unique name for the object receiving metadata by combining
       * unique data from the subject with a metadataKey.
+      * <p>
 -- 
-2.21.0
+2.13.3.windows.1
 
