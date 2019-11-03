@@ -1,4 +1,4 @@
-From e12ba4aa23ea93242a2b72c976f3d594a899b942 Mon Sep 17 00:00:00 2001
+From 1e44052352ed57fad3c32d11fb3b57468956174b Mon Sep 17 00:00:00 2001
 From: Minecrell <minecrell@minecrell.net>
 Date: Thu, 21 Sep 2017 16:33:35 +0200
 Subject: [PATCH] Include Log4J2 SLF4J implementation
@@ -8,19 +8,19 @@ diff --git a/pom.xml b/pom.xml
 index 5ab1f2984..2990c04b8 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -65,6 +65,12 @@
+@@ -63,6 +63,12 @@
+             <version>2.8.1</version>
+             <scope>compile</scope>
          </dependency>
-         <dependency>
-             <groupId>org.apache.logging.log4j</groupId>
++        <dependency>
++            <groupId>org.apache.logging.log4j</groupId>
 +            <artifactId>log4j-slf4j-impl</artifactId>
 +            <version>2.8.1</version>
 +            <scope>runtime</scope>
 +        </dependency>
-+        <dependency>
-+            <groupId>org.apache.logging.log4j</groupId>
+         <dependency>
+             <groupId>org.apache.logging.log4j</groupId>
              <artifactId>log4j-iostreams</artifactId>
-             <version>2.8.1</version>
-         </dependency>
 -- 
-2.13.3.windows.1
+2.22.0.windows.1
 

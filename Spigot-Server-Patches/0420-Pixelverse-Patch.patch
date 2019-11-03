@@ -1,6 +1,6 @@
-From 1c50b223cac2b8a65d95bd7db83d3d50a36521ea Mon Sep 17 00:00:00 2001
-From: apollosoftware <contact@apollosoftware.io>
-Date: Thu, 31 Oct 2019 17:33:59 -0700
+From 76a3aa61393253a6be24bd3bb6e9ea8d9800c4e1 Mon Sep 17 00:00:00 2001
+From: CarrotChomps <CarrotChomps@users.noreply.github.com>
+Date: Sun, 3 Nov 2019 13:54:24 -0500
 Subject: [PATCH] Pixelverse Patch
 
 
@@ -92,7 +92,7 @@ index c950139c0..0efa2d184 100644
          double[] adouble = new double[]{1.0D};
          double d0 = vec3d1.x - vec3d.x;
 diff --git a/src/main/java/net/minecraft/server/Entity.java b/src/main/java/net/minecraft/server/Entity.java
-index e8def7f81..c6a4781b5 100644
+index e8def7f81..cc4f98db3 100644
 --- a/src/main/java/net/minecraft/server/Entity.java
 +++ b/src/main/java/net/minecraft/server/Entity.java
 @@ -17,6 +17,8 @@ import java.util.UUID;
@@ -187,7 +187,20 @@ index e8def7f81..c6a4781b5 100644
      public final boolean defaultActivationState;
      public long activatedTick = Integer.MIN_VALUE;
      public boolean fromMobSpawner;
-@@ -244,6 +248,66 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -220,7 +224,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+         this.aG = new double[]{0.0D, 0.0D, 0.0D};
+         this.f = entitytypes;
+         this.world = world;
+-        this.size = entitytypes.k();
++        // Pixelverse start
++        if(entitytypes != null) {
++            this.size = entitytypes.k();
++        }
++        // Pixelverse end
+         this.setPosition(0.0D, 0.0D, 0.0D);
+         if (world != null) {
+             this.dimension = world.worldProvider.getDimensionManager();
+@@ -244,6 +252,66 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          this.headHeight = this.getHeadHeight(EntityPose.STANDING, this.size);
      }
  
@@ -254,7 +267,7 @@ index e8def7f81..c6a4781b5 100644
      public boolean isSpectator() {
          return false;
      }
-@@ -3253,7 +3317,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
+@@ -3253,7 +3321,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener, Ke
          return this.size.height;
      }
  
@@ -753,5 +766,5 @@ index f44ef67af..e6ee01263 100644
          }
  
 -- 
-2.13.3.windows.1
+2.22.0.windows.1
 

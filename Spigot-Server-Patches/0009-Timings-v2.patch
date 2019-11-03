@@ -1,4 +1,4 @@
-From 22f675299b45351e36cfcfa6bfc85604bc253bff Mon Sep 17 00:00:00 2001
+From a398dbdc2cd87ce099842c73e2fd6e7aa9b56562 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Thu, 3 Mar 2016 04:00:11 -0600
 Subject: [PATCH] Timings v2
@@ -1373,7 +1373,7 @@ diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/ja
 index dce5bde54..a59f61e73 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1932,6 +1932,7 @@ public final class CraftServer implements Server {
+@@ -1932,12 +1932,31 @@ public final class CraftServer implements Server {
      private final Spigot spigot = new Spigot()
      {
  
@@ -1381,10 +1381,10 @@ index dce5bde54..a59f61e73 100644
          @Override
          public YamlConfiguration getConfig()
          {
-@@ -1939,6 +1940,24 @@ public final class CraftServer implements Server {
+             return org.spigotmc.SpigotConfig.config;
          }
  
-         @Override
++        @Override
 +        public YamlConfiguration getBukkitConfig()
 +        {
 +            return configuration;
@@ -1402,10 +1402,9 @@ index dce5bde54..a59f61e73 100644
 +            return com.destroystokyo.paper.PaperConfig.config;
 +        }
 +
-+        @Override
+         @Override
          public void restart() {
              org.spigotmc.RestartCommand.restart();
-         }
 diff --git a/src/main/java/org/bukkit/craftbukkit/SpigotTimings.java b/src/main/java/org/bukkit/craftbukkit/SpigotTimings.java
 deleted file mode 100644
 index b98a7b56a..000000000
@@ -1838,5 +1837,5 @@ index ca7789b5e..442383969 100644
      }
  }
 -- 
-2.13.3.windows.1
+2.22.0.windows.1
 
