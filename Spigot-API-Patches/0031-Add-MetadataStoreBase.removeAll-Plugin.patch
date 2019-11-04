@@ -1,4 +1,4 @@
-From b347c086603dc35713ef03c964d767847f08b72f Mon Sep 17 00:00:00 2001
+From 80da5a16a2e7566903e752dd114af32392773862 Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Tue, 16 Jul 2013 21:26:50 -0400
 Subject: [PATCH] Add MetadataStoreBase.removeAll(Plugin)
@@ -17,11 +17,10 @@ index b3d85d97..0e8cd85c 100644
  import java.util.List;
  import java.util.Map;
  import java.util.WeakHashMap;
-@@ -130,6 +131,26 @@ public abstract class MetadataStoreBase<T> {
-         }
+@@ -131,6 +132,26 @@ public abstract class MetadataStoreBase<T> {
      }
  
-+    /**
+     /**
 +     * Removes all metadata in the metadata store that originates from the
 +     * given plugin.
 +     *
@@ -41,9 +40,10 @@ index b3d85d97..0e8cd85c 100644
 +        }
 +    }
 +
-     /**
++    /**
       * Creates a unique name for the object receiving metadata by combining
       * unique data from the subject with a metadataKey.
+      * <p>
 -- 
-2.22.0.windows.1
+2.13.3.windows.1
 

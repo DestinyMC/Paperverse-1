@@ -1,4 +1,4 @@
-From 394d4141a561dfa939ab37b216cfd083a76ae009 Mon Sep 17 00:00:00 2001
+From 9db31aeb0d13f319e037c918176bca7970b0221c Mon Sep 17 00:00:00 2001
 From: Aikar <aikar@aikar.co>
 Date: Fri, 1 Apr 2016 00:02:47 -0400
 Subject: [PATCH] Add FastUtil to Bukkit
@@ -9,19 +9,19 @@ diff --git a/pom.xml b/pom.xml
 index aef4ec33..2daee11a 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -49,6 +49,12 @@
-     </pluginRepositories>
+@@ -50,6 +50,12 @@
  
      <dependencies>
-+        <dependency>
+         <dependency>
 +            <groupId>it.unimi.dsi</groupId>
 +            <artifactId>fastutil</artifactId>
 +            <version>8.2.2</version>
 +            <scope>provided</scope>
 +        </dependency>
-         <dependency>
++        <dependency>
              <groupId>commons-lang</groupId>
              <artifactId>commons-lang</artifactId>
+             <version>2.6</version>
 -- 
-2.22.0.windows.1
+2.13.3.windows.1
 
