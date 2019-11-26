@@ -1,6 +1,6 @@
-From 4935d775e39f7a9fffdbec1ad0e7ae40e2676623 Mon Sep 17 00:00:00 2001
+From a61d206df36db480ac22d0cc151758ec7b5052db Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
-Date: Mon, 11 Nov 2019 15:35:29 -0800
+Date: Mon, 25 Nov 2019 23:16:38 -0800
 Subject: [PATCH] Pixelverse Patch
 
 
@@ -523,7 +523,7 @@ index 253ff9594..52d2f85dc 100644
      public float c;
      public float d;
 diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
-index 460c687d3..6b48482f1 100644
+index 460c687d3..6b997b634 100644
 --- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 @@ -7,6 +7,7 @@ import java.util.Iterator;
@@ -554,19 +554,6 @@ index 460c687d3..6b48482f1 100644
      private long xLoc;
      private long yLoc;
      private long zLoc;
-@@ -270,6 +277,12 @@ public class EntityTrackerEntry {
-             // CraftBukkit end
-         }
- 
-+        // Pixelverse start
-+        if (!this.tracker.canObserve(entityplayer)) {
-+            return;
-+        }
-+        // Pixelverse end
-+
-         Packet<?> packet = this.tracker.N();
- 
-         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
 diff --git a/src/main/java/net/minecraft/server/EntityTypes.java b/src/main/java/net/minecraft/server/EntityTypes.java
 index 612b9b7e3..c872b3a23 100644
 --- a/src/main/java/net/minecraft/server/EntityTypes.java
@@ -618,6 +605,23 @@ index 0b0058138..52f5ededd 100644
              // Spigot End
              if (!eula.a() && !eulaAgreed) { // Spigot
                  MinecraftServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+index 59e74900f..cc910626b 100644
+--- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+@@ -1642,6 +1642,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+                     entityplayer.removeQueue.remove(Integer.valueOf(this.tracker.getId()));
+                     // CraftBukkit end
+ 
++                    // Pixelverse start
++                    if (!this.tracker.canObserve(entityplayer)) {
++                        return;
++                    }
++                    // Pixelverse end
++
+                     if (flag1 && this.trackedPlayerMap.putIfAbsent(entityplayer, true) == null) { // Paper
+                         this.trackerEntry.b(entityplayer);
+                     }
 diff --git a/src/main/java/net/minecraft/server/WorldMap.java b/src/main/java/net/minecraft/server/WorldMap.java
 index 090d3dbd3..622713a35 100644
 --- a/src/main/java/net/minecraft/server/WorldMap.java
