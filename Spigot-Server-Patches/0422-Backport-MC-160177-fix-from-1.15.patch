@@ -1,11 +1,11 @@
-From 5b2cfa47f19b2dfb4aeb6af81cc7309de224ff27 Mon Sep 17 00:00:00 2001
+From a9ec47b56d9918c0f905735d7be9f2e447d47a94 Mon Sep 17 00:00:00 2001
 From: Gerrygames <gecam59@gmail.com>
 Date: Thu, 21 Nov 2019 14:56:51 +0100
 Subject: [PATCH] Backport MC-160177 fix from 1.15
 
 
 diff --git a/src/main/java/net/minecraft/server/PlayerInteractManager.java b/src/main/java/net/minecraft/server/PlayerInteractManager.java
-index bc03a82b..c77e812b 100644
+index bc03a82b7..c77e812b0 100644
 --- a/src/main/java/net/minecraft/server/PlayerInteractManager.java
 +++ b/src/main/java/net/minecraft/server/PlayerInteractManager.java
 @@ -86,14 +86,17 @@ public class PlayerInteractManager {
@@ -30,5 +30,5 @@ index bc03a82b..c77e812b 100644
          int j = (int) (f * 10.0F);
  
 -- 
-2.24.0
+2.13.3.windows.1
 

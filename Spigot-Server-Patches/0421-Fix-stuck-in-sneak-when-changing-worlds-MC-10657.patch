@@ -1,14 +1,14 @@
-From 0d0548d6c0dae5a044a5e52dcf56c6a4a1eb7a73 Mon Sep 17 00:00:00 2001
+From fe3d3f801a1c3bc8988ac2e77dfdacf2f535534a Mon Sep 17 00:00:00 2001
 From: William Blake Galbreath <blake.galbreath@gmail.com>
 Date: Wed, 9 Oct 2019 21:51:43 -0500
 Subject: [PATCH] Fix stuck in sneak when changing worlds (MC-10657)
 
 
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index 7801879c8..8541dbe8d 100644
+index d77be9a1b..c95fbd997 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
-@@ -963,6 +963,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -979,6 +979,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
              this.lastHealthSent = -1.0F;
              this.lastFoodSent = -1;
  
@@ -31,5 +31,5 @@ index 3cb443c4f..4ba349e1a 100644
          entityplayer.b(((CraftWorld) fromWorld).getHandle());
  
 -- 
-2.23.0.rc1
+2.13.3.windows.1
 

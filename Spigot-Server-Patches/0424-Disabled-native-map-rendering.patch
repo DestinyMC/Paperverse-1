@@ -1,0 +1,22 @@
+From b759cf5743852c8d6b9e0ecf8e535ee20d629f67 Mon Sep 17 00:00:00 2001
+From: apollosoftware <contact@apollosoftware.io>
+Date: Thu, 12 Dec 2019 00:01:21 -0800
+Subject: [PATCH] Disabled native map rendering
+
+
+diff --git a/src/main/java/net/minecraft/server/ItemWorldMap.java b/src/main/java/net/minecraft/server/ItemWorldMap.java
+index cf9efcf11..f0c14e288 100644
+--- a/src/main/java/net/minecraft/server/ItemWorldMap.java
++++ b/src/main/java/net/minecraft/server/ItemWorldMap.java
+@@ -317,7 +317,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
+                 }
+ 
+                 if (!worldmap.locked && (flag || entity instanceof EntityHuman && ((EntityHuman) entity).getItemInOffHand() == itemstack)) {
+-                    this.a(world, entity, worldmap);
++                    //this.a(world, entity, worldmap);
+                 }
+ 
+             }
+-- 
+2.13.3.windows.1
+
