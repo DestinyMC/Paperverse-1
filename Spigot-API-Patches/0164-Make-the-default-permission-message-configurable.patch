@@ -1,4 +1,4 @@
-From 250aca59d090a9e498bd450729ec5352973595f4 Mon Sep 17 00:00:00 2001
+From 793ffb943c75067ce3ea1b19db49f2aa779b6fc4 Mon Sep 17 00:00:00 2001
 From: Shane Freeder <theboyetronic@gmail.com>
 Date: Sun, 18 Nov 2018 19:44:54 +0000
 Subject: [PATCH] Make the default permission message configurable
@@ -8,10 +8,11 @@ diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Buk
 index 0c519c41..2148a3c2 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1558,6 +1558,15 @@ public final class Bukkit {
+@@ -1557,6 +1557,15 @@ public final class Bukkit {
+         return server.suggestPlayerNamesWhenNullTabCompletions();
      }
  
-     /**
++    /**
 +     *
 +     * @return the default no permission message used on the server
 +     */
@@ -20,28 +21,27 @@ index 0c519c41..2148a3c2 100644
 +        return server.getPermissionMessage();
 +    }
 +
-+    /**
+     /**
       * Creates a PlayerProfile for the specified uuid, with name as null
       * @param uuid UUID to create profile for
-      * @return A PlayerProfile object
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
 index 8a76df52..1cbb9bc6 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1365,6 +1365,13 @@ public interface Server extends PluginMessageRecipient {
+@@ -1364,6 +1364,13 @@ public interface Server extends PluginMessageRecipient {
+      */
      boolean suggestPlayerNamesWhenNullTabCompletions();
  
-     /**
++    /**
 +     *
 +     * @return the default no permission message used on the server
 +     */
 +    @NotNull
 +    String getPermissionMessage();
 +
-+    /**
+     /**
       * Creates a PlayerProfile for the specified uuid, with name as null
       * @param uuid UUID to create profile for
-      * @return A PlayerProfile object
 diff --git a/src/main/java/org/bukkit/command/Command.java b/src/main/java/org/bukkit/command/Command.java
 index 03bdc162..0b0d1bd7 100644
 --- a/src/main/java/org/bukkit/command/Command.java
@@ -56,5 +56,5 @@ index 03bdc162..0b0d1bd7 100644
              for (String line : permissionMessage.replace("<permission>", permission).split("\n")) {
                  target.sendMessage(line);
 -- 
-2.13.3.windows.1
+2.24.1.windows.2
 
