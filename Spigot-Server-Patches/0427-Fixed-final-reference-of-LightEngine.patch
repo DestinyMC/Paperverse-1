@@ -1,0 +1,22 @@
+From 9023fc87f381a6d7e25eafeaf81ea208267204b3 Mon Sep 17 00:00:00 2001
+From: "apollosoftware.io" <contact@apollosoftware.io>
+Date: Sat, 21 Dec 2019 07:22:58 -0800
+Subject: [PATCH] Fixed final reference of LightEngine
+
+
+diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+index 3acab0bf2..fcfe02a9b 100644
+--- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+@@ -59,7 +59,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+     private final Long2ObjectLinkedOpenHashMap<PlayerChunk> pendingUnload;
+     final LongSet loadedChunks; // Paper - private -> package
+     public final WorldServer world;
+-    private final LightEngineThreaded lightEngine;
++    private LightEngineThreaded lightEngine;
+     private final IAsyncTaskHandler<Runnable> executor;
+     public final ChunkGenerator<?> chunkGenerator;
+     private final Supplier<WorldPersistentData> m; public final Supplier<WorldPersistentData> getWorldPersistentDataSupplier() { return this.m; } // Paper - OBFHELPER
+-- 
+2.24.1.windows.2
+

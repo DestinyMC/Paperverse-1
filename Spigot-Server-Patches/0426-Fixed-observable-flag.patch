@@ -1,14 +1,14 @@
-From b3dfb96c20addf39f15f4feb371d660a7da07a2d Mon Sep 17 00:00:00 2001
+From d31ad1c0ba14053826e901dd1a86872c5f200433 Mon Sep 17 00:00:00 2001
 From: "apollosoftware.io" <contact@apollosoftware.io>
 Date: Thu, 19 Dec 2019 03:53:24 -0800
 Subject: [PATCH] Fixed observable flag
 
 
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index cc910626b..d1b40c242 100644
+index edda5bb04..3acab0bf2 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-@@ -1644,7 +1644,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -1650,7 +1650,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
  
                      // Pixelverse start
                      if (!this.tracker.canObserve(entityplayer)) {

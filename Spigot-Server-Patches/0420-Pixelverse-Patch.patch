@@ -1,4 +1,4 @@
-From a61d206df36db480ac22d0cc151758ec7b5052db Mon Sep 17 00:00:00 2001
+From cc9edc992e5d0af45e6fb23d6ef83fe252e5ecb4 Mon Sep 17 00:00:00 2001
 From: apollosoftware <contact@apollosoftware.io>
 Date: Mon, 25 Nov 2019 23:16:38 -0800
 Subject: [PATCH] Pixelverse Patch
@@ -606,10 +606,10 @@ index 0b0058138..52f5ededd 100644
              if (!eula.a() && !eulaAgreed) { // Spigot
                  MinecraftServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
 diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-index 59e74900f..cc910626b 100644
+index 642c0888a..edda5bb04 100644
 --- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
 +++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
-@@ -1642,6 +1642,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+@@ -1648,6 +1648,12 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                      entityplayer.removeQueue.remove(Integer.valueOf(this.tracker.getId()));
                      // CraftBukkit end
  
@@ -756,7 +756,7 @@ index 000000000..64ee963c7
 +}
 \ No newline at end of file
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
-index aee97b9f0..20ae2f9a0 100644
+index c29a78fd3..30b323e83 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSkull.java
 @@ -28,7 +28,7 @@ class CraftMetaSkull extends CraftMetaItem implements SkullMeta {
@@ -796,5 +796,5 @@ index f44ef67af..e6ee01263 100644
          }
  
 -- 
-2.13.3.windows.1
+2.24.1.windows.2
 
