@@ -1,0 +1,33 @@
+From bf8742ff08620763b516d64babf163080178c7d2 Mon Sep 17 00:00:00 2001
+From: "apollosoftware.io" <contact@apollosoftware.io>
+Date: Sun, 29 Dec 2019 18:16:02 -0800
+Subject: [PATCH] Optimized updatePlayer() in PlayerChunkMap.EntityTracker
+
+Our game usually runs a higher entity count than usual so this is a very necessary change.
+
+diff --git a/src/main/java/net/minecraft/server/PlayerChunkMap.java b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+index fcfe02a9b..f909dc476 100644
+--- a/src/main/java/net/minecraft/server/PlayerChunkMap.java
++++ b/src/main/java/net/minecraft/server/PlayerChunkMap.java
+@@ -1621,10 +1621,15 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
+         public void updatePlayer(EntityPlayer entityplayer) {
+             org.spigotmc.AsyncCatcher.catchOp("player tracker update"); // Spigot
+             if (entityplayer != this.tracker) {
+-                Vec3D vec3d = (new Vec3D(entityplayer.locX, entityplayer.locY, entityplayer.locZ)).d(this.tracker.getPositionVector()); // MC-155077, SPIGOT-5113
+-                int i = Math.min(this.trackingDistance, (PlayerChunkMap.this.viewDistance - 1) * 16);
+-                boolean flag = vec3d.x >= (double) (-i) && vec3d.x <= (double) i && vec3d.z >= (double) (-i) && vec3d.z <= (double) i && this.tracker.a(entityplayer);
++                // Pixelverse start
++                //Vec3D vec3d = (new Vec3D(entityplayer.locX, entityplayer.locY, entityplayer.locZ)).d(this.tracker.getPositionVector()); // MC-155077, SPIGOT-5113
++                double vecX = entityplayer.locX + -tracker.locX;
++                double vecY = entityplayer.locY + -tracker.locY;
++                double vecZ = entityplayer.locZ + -tracker.locZ;
+ 
++                int i = Math.min(this.trackingDistance, (PlayerChunkMap.this.viewDistance - 1) * 16);
++                boolean flag = vecX >= (double) (-i) && vecY <= (double) i && vecZ >= (double) (-i) && vecZ <= (double) i && this.tracker.a(entityplayer);
++                // Pixelverse end
+                 if (flag) {
+                     boolean flag1 = this.tracker.attachedToPlayer;
+ 
+-- 
+2.24.1.windows.2
+
