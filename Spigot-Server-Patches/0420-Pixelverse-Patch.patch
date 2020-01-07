@@ -654,7 +654,7 @@ index 000000000..5265717d2
 +import net.minecraft.server.*;
 +
 +/**
-+ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * Copyright © 2020 Property of HQGAMING STUDIO, LLC
 + * All rights reserved. No part of this publication may be reproduced, distributed, or
 + * transmitted in any form or by any means, including photocopying, recording, or other
 + * electronic or mechanical methods, without the prior written permission of the publisher,
@@ -688,7 +688,7 @@ index 000000000..64ee963c7
 +import java.lang.reflect.Field;
 +
 +/**
-+ * Copyright © 2018 Property of HQGAMING STUDIO, LLC
++ * Copyright © 2020 Property of HQGAMING STUDIO, LLC
 + * All rights reserved. No part of this publication may be reproduced, distributed, or
 + * transmitted in any form or by any means, including photocopying, recording, or other
 + * electronic or mechanical methods, without the prior written permission of the publisher,
